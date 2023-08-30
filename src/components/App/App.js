@@ -10,13 +10,14 @@ import Register from '../Register/Register';
 import Header from '../Header/Header';
 import { useResize } from '../../hooks/useResize';
 import { AppContext } from '../../contexts/AppContext';
+import Footer from '../Footer/Footer';
 
 function App() {
-  const handleLogOff = true;
+  const handleLogOff = false;
   const { isScreenSm, isScreenMd, isScreenLg, isScreenXl } = useResize();
 
   return (
-    <div className="App">
+    <div className="app">
       <AppContext.Provider value={{ isScreenSm, isScreenMd, isScreenLg, isScreenXl, handleLogOff }}>
         <Header />
         <Routes>
@@ -27,6 +28,7 @@ function App() {
           <Route path="/signin" element={<Login />} />
           <Route path="/signup" element={<Register />} />
         </Routes>
+        <Footer />
       </AppContext.Provider>
     </div>
   );

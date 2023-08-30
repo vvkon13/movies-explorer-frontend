@@ -19,8 +19,10 @@ function Header() {
 
     const { isScreenLg, handleLogOff } = useContext(AppContext);
     return isHeaderExists && (
-        <header className='header'>
-            <img src={logo} alt='Логотип' сlassName='logo' />
+        <header className='header app__header'>
+            <Link to='/' >
+                <img src={logo} alt='Логотип' сlassName='logo app__button' />
+            </Link>
             {!handleLogOff && isScreenLg && (
                 <nav>
                     <ul className='header__navbar-films'>
@@ -44,7 +46,7 @@ function Header() {
             {!handleLogOff && isScreenLg && (
                 <nav>
                     <Link to='/profile'>
-                        <button className="header__button-profile" type="button" >Аккаунт</button>
+                        <button className="header__button-profile app__button" type="button" >Аккаунт</button>
                     </Link>
                 </nav>
 
@@ -52,7 +54,7 @@ function Header() {
             }
             {!handleLogOff && !isScreenLg && (
                 <nav>
-                    <button className="header__button-burger" type="button" onClick={sayHi} />
+                    <button className="header__button-burger app__button" type="button" onClick={sayHi} />
                 </nav>
             )
             }
@@ -66,7 +68,7 @@ function Header() {
                         </li>
                         <li>
                             <Link to='/signin'>
-                                <button className="header__button-signin" type="button" >
+                                <button className="header__button-signin app__button" type="button" >
                                     Войти
                                 </button>
                             </Link>

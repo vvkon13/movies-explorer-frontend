@@ -73,12 +73,6 @@
     border-style: none;
 }
 
-.header__button-profile:hover {
-    opacity: 0.8;
-    transition: opacity 100ms ease-in;
-    cursor: pointer;
-}
-
 .header__button-burger {
     min-width: 44px;
     min-height: 44px;
@@ -91,12 +85,6 @@
     background-position: center;
     background-repeat: no-repeat;
     background-origin: content-box;
-}
-
-.header__button-burger:hover {
-    opacity: 0.8;
-    transition: opacity 100ms ease-in;
-    cursor: pointer;
 }
 
 .header__button-signin {
@@ -114,21 +102,9 @@
     /* 133.333% */
 }
 
-.header__button-signin:hover {
-    opacity: 0.8;
-    transition: opacity 100ms ease-in;
-    cursor: pointer;
-}
-
 @media (max-width:1024px) {
     .header {
         padding: 0px 30px;
-    }
-    .header__link {
-        font-weight: 500;
-    }
-    .header__link_active {
-        border-bottom: #000000;
     }
 }
 
@@ -136,6 +112,7 @@
     .header {
         padding: 0px 14px;
     }
+    
     .header__navbar-signinup {
         gap: 14px;
     }
