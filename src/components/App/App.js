@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Movies from '../Movies/Movies';
@@ -11,14 +11,26 @@ import Header from '../Header/Header';
 import { useResize } from '../../hooks/useResize';
 import { AppContext } from '../../contexts/AppContext';
 import Footer from '../Footer/Footer';
+import PageNotFound from '../PageNotFound/PageNotFound';
 
 function App() {
   const handleLogOff = false;
   const { isScreenSm, isScreenMd, isScreenLg, isScreenXl } = useResize();
+  const [isLoading, setIsLoading] = useState(true);
+  setTimeout(()=>{setIsLoading(false)},5000);
 
   return (
     <div className="app">
-      <AppContext.Provider value={{ isScreenSm, isScreenMd, isScreenLg, isScreenXl, handleLogOff }}>
+      <AppContext.Provider
+        value={
+          {
+            isScreenSm,
+            isScreenMd,
+            isScreenLg,
+            isScreenXl,
+            handleLogOff,
+            isLoading
+          }}>
         <Header />
         <Routes>
           <Route path="/" element={<Main />} />
@@ -27,6 +39,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/signin" element={<Login />} />
           <Route path="/signup" element={<Register />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
       </AppContext.Provider>

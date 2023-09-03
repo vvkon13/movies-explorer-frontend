@@ -9,11 +9,6 @@
     box-sizing: border-box;
 }
 
-.logo {
-    width: 38px;
-    height: 38px;
-}
-
 .header__navbar-films {
     display: flex;
     gap: 16px;

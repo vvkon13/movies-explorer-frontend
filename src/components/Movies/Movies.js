@@ -1,9 +1,10 @@
 import React from "react";
+import SearchForm from "../SearchForm/SearchForm";
 
 function Movies() {
     return (
         <>
-            <h1> Movies </h1>
+           <SearchForm /> 
         </>
     );
 }

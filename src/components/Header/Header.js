@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import logo from '../../image/logo.svg';
 import './Header.css';
 import { AppContext } from '../../contexts/AppContext';
 import { Link, useLocation } from 'react-router-dom';
+import LogoPreloader from '../LogoPreloader/LogoPreloader';
 
 function Header() {
     function sayHi() {
@@ -20,9 +20,7 @@ function Header() {
     const { isScreenLg, handleLogOff } = useContext(AppContext);
     return isHeaderExists && (
         <header className='header app__header'>
-            <Link to='/' >
-                <img src={logo} alt='Логотип' сlassName='logo app__button' />
-            </Link>
+            <LogoPreloader />
             {!handleLogOff && isScreenLg && (
                 <nav>
                     <ul className='header__navbar-films'>
@@ -81,5 +79,6 @@ function Header() {
         </header >
     );
 }
+
 
 export default Header;

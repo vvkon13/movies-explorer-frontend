@@ -11,7 +11,7 @@ function Footer() {
         isFooterExists = true;
     }
     return isFooterExists && (
-        <footer className='footer app__footer' id='AboutProject'>
+        <footer className='footer app__footer'>
             <h2 className='footer__title'>
                 Учебный проект Яндекс.Практикум х BeatFilm.
             </h2>

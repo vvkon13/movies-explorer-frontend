@@ -14,14 +14,14 @@ function NavTab() {
                     </AnchorLink>
                 </li>
                 <li>
-                    <AnchorLink href="#AboutProject">
+                    <AnchorLink href="#Techs">
                         <button className="navtab__button app__button">
                             Технологии
                         </button>
                     </AnchorLink>
                 </li>
                 <li>
-                    <AnchorLink href="#AboutProject">
+                    <AnchorLink href="#AboutMe">
                         <button className="navtab__button app__button">
                             Студент
                         </button>
