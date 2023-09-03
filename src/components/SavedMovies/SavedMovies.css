@@ -1,0 +1,22 @@
+.saved-movies {
+    max-width: 1280px;
+    min-width: 320px;
+}
+
+.saved-movies__footer{
+    min-height: 214px;
+    padding: 0;
+    margin: 0;
+}
+
+@media (max-width:1024px) {
+    .saved-movies__footer{
+        min-height: 155px;
+    }
+}
+
+@media (max-width:564px) {
+    .saved-movies__footer{
+        min-height: 140px;
+    }
+}

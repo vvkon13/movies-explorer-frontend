@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import './Header.css';
 import { AppContext } from '../../contexts/AppContext';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import LogoPreloader from '../LogoPreloader/LogoPreloader';
 
 function Header() {
@@ -16,7 +16,6 @@ function Header() {
         (location.pathname === "/profile")) {
         isHeaderExists = true;
     }
-
     const { isScreenLg, handleLogOff } = useContext(AppContext);
     return isHeaderExists && (
         <header className='header app__header'>
@@ -25,18 +24,18 @@ function Header() {
                 <nav>
                     <ul className='header__navbar-films'>
                         <li>
-                            <Link
+                            <NavLink className='header__link'
                                 to='/movies'
-                                className={`header__link ${(location.pathname === '/movies') && 'header__link_active'}`}>
+                            >
                                 Фильмы
-                            </Link>
+                            </NavLink>
                         </li>
                         <li>
-                            <Link
+                            <NavLink className='header__link'
                                 to='/saved-movies'
-                                className={`header__link ${(location.pathname === '/saved-movies') && 'header__link_active'}`}>
+                            >
                                 Сохранённые фильмы
-                            </Link>
+                            </NavLink>
                         </li>
                     </ul>
                 </nav>
@@ -47,7 +46,6 @@ function Header() {
                         <button className="header__button-profile app__button" type="button" >Аккаунт</button>
                     </Link>
                 </nav>
-
             )
             }
             {!handleLogOff && !isScreenLg && (
@@ -60,9 +58,9 @@ function Header() {
                 <nav>
                     <ul className='header__navbar-signinup'>
                         <li>
-                            <Link to='/signup' className='header__link'>
+                            <NavLink to='/signup' className='header__link'>
                                 Регистрация
-                            </Link>
+                            </NavLink>
                         </li>
                         <li>
                             <Link to='/signin'>
@@ -75,7 +73,6 @@ function Header() {
 
                 </nav>
             )}
-
         </header >
     );
 }

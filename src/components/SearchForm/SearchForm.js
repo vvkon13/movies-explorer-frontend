@@ -18,8 +18,8 @@ function SearchForm() {
                 <button className="search-form__button-submit app__button" type="submit" />
             </div>
             <FilterCheckbox />
+            <div className="search-form__border-bottom"></div>
         </form>
-
     );
 }
 

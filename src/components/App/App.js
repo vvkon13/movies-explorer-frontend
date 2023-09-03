@@ -15,7 +15,7 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 
 function App() {
   const handleLogOff = false;
-  const { isScreenSm, isScreenMd, isScreenLg, isScreenXl } = useResize();
+  const { isScreenSm, isScreenLg } = useResize();
   const [isLoading, setIsLoading] = useState(true);
   setTimeout(()=>{setIsLoading(false)},5000);
 
@@ -25,9 +25,7 @@ function App() {
         value={
           {
             isScreenSm,
-            isScreenMd,
             isScreenLg,
-            isScreenXl,
             handleLogOff,
             isLoading
           }}>
