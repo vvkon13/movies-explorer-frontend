@@ -4,10 +4,7 @@ import { AppContext } from '../../contexts/AppContext';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import LogoPreloader from '../LogoPreloader/LogoPreloader';
 
-function Header() {
-    function sayHi() {
-        console.log('Hi i am burger');
-    }
+function Header({sayHi}) {
     let isHeaderExists = false;
     let location = useLocation();
     if ((location.pathname === "/") ||
