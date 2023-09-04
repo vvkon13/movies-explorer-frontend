@@ -10,14 +10,21 @@ import Register from '../Register/Register';
 import Header from '../Header/Header';
 import { useResize } from '../../hooks/useResize';
 import { AppContext } from '../../contexts/AppContext';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Footer from '../Footer/Footer';
 import PageNotFound from '../PageNotFound/PageNotFound';
 
 function App() {
-  const handleLogOff = false;
+  const [loggedIn, setLoggedIn] = useState(true);
   const { isScreenSm, isScreenLg } = useResize();
-  const [isLoading, setIsLoading] = useState(true);
-  setTimeout(()=>{setIsLoading(false)},5000);
+  const [isLoading, setIsLoading] = useState(false);
+  const initialStateCurrentUser = { name: '', email: '' };
+  const [currentUser, setCurrentUser] = useState(initialStateCurrentUser);
+
+  function handleTimeout() {
+    setIsLoading(true);
+    setTimeout(()=>{setIsLoading(false)},5000);
+  }
 
   return (
     <div className="app">
@@ -26,20 +33,22 @@ function App() {
           {
             isScreenSm,
             isScreenLg,
-            handleLogOff,
+            loggedIn,
             isLoading
           }}>
+            <CurrentUserContext.Provider value={{ currentUser }}>
         <Header />
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/saved-movies" element={<SavedMovies />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/signin" element={<Login />} />
-          <Route path="/signup" element={<Register />} />
+          <Route path="/signin" element={<Login handleAuthorization={handleTimeout}/>} />
+          <Route path="/signup" element={<Register handleRegistration={handleTimeout} />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
+        </CurrentUserContext.Provider>
       </AppContext.Provider>
     </div>
   );

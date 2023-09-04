@@ -16,11 +16,11 @@ function Header() {
         (location.pathname === "/profile")) {
         isHeaderExists = true;
     }
-    const { isScreenLg, handleLogOff } = useContext(AppContext);
+    const { isScreenLg, loggedIn } = useContext(AppContext);
     return isHeaderExists && (
         <header className='header app__header'>
             <LogoPreloader />
-            {!handleLogOff && isScreenLg && (
+            {loggedIn && isScreenLg && (
                 <nav>
                     <ul className='header__navbar-films'>
                         <li>
@@ -40,7 +40,7 @@ function Header() {
                     </ul>
                 </nav>
             )}
-            {!handleLogOff && isScreenLg && (
+            {loggedIn && isScreenLg && (
                 <nav>
                     <Link to='/profile'>
                         <button className="header__button-profile app__button" type="button" >Аккаунт</button>
@@ -48,13 +48,13 @@ function Header() {
                 </nav>
             )
             }
-            {!handleLogOff && !isScreenLg && (
+            {loggedIn && !isScreenLg && (
                 <nav>
                     <button className="header__button-burger app__button" type="button" onClick={sayHi} />
                 </nav>
             )
             }
-            {handleLogOff && (
+            {!loggedIn && (
                 <nav>
                     <ul className='header__navbar-signinup'>
                         <li>

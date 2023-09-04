@@ -1,11 +1,28 @@
-import React from "react";
+import SignInUp from "../SignInUp/SignInUp";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { AppContext } from "../../contexts/AppContext";
+import "./Login.css";
 
-function Login() {
+export function Login({ handleAuthorization }) {
+    const { isLoading } = useContext(AppContext);
     return (
+    /*     loggedIn ?
+            <Navigate to='/main' replace /> : */
+    
         <>
-            <h1> Login </h1>
+            <SignInUp
+                formName={'login'}
+                title={'Рады видеть!'}
+                buttonSubmitText={isLoading ? 'Вход...' : 'Войти'}
+                onSignInUp={handleAuthorization}
+            />
+            <div className="login__footer">
+                <p className="login__link-text">Ещё не зарегистрированы?</p>
+                <Link to={'/sign-up'} className='login__link app__link'>Регистрация</Link>
+            </div>
         </>
-    );
+    )
 }
 
 export default Login;

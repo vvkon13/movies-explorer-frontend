@@ -1,0 +1,80 @@
+.profile {
+    max-width: 470px;
+    padding: 74px 0 0 0;
+    margin: 0 auto;
+}
+
+.profile__title {
+    color: #FFF;
+    text-align: center;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 0 0 107px 0;
+    margin: 0;
+}
+
+.profile__label {
+    color: #FFF;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+    margin: 0;
+}
+
+.profile__label_underlined {
+    border-bottom: solid 1px #424242;
+    ;
+}
+
+.profile__input {
+    width: 50%;
+    display: block;
+    padding: 0;
+    border-style: none;
+    background-color: transparent;
+    color: #FFF;
+    text-align: right;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.profile__button-submit {
+    display: block;
+    padding: 204px 0 16px 0;
+    margin: 0 auto;
+    border-style: none;
+    background-color: transparent;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.profile__button-logoff {
+    display: block;
+    padding: 0 0 70px 0;
+    margin: 0 auto;
+    border-style: none;
+    background-color: transparent;
+    color: #EE3465;
+    text-align: center;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
