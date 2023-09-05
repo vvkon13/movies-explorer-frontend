@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useContext } from "react";
 import { AppContext } from "../../contexts/AppContext";
-import {CurrentUserContext} from "../../contexts/CurrentUserContext";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import useForm from "../../hooks/useForm";
 import "./Profile.css";
 
@@ -28,7 +28,7 @@ function Profile({ handleChangeProfile, handleExitProfile }) {
 
     return (
         <section className="profile">
-            <h2 className="profile__title">{`Привет, ${(currentUser.name==='')?'бро':currentUser.name}!`}</h2>
+            <h2 className="profile__title">{`Привет, ${(currentUser.name === '') ? 'бро' : currentUser.name}!`}</h2>
             <form name="profile" onSubmit={handleSubmit} className="profile__form">
                 <div className="profile__inputs">
                     <label className="profile__label profile__label_underlined">Имя
@@ -47,7 +47,7 @@ function Profile({ handleChangeProfile, handleExitProfile }) {
                 </button>
             </form>
             <button className="profile__button-logoff app__button" type="button" onClick={handleExitProfile} >
-                {isLoading ? 'Выход...' : 'Выйти из аккаунта'}
+                Выйти из аккаунта
             </button>
         </section>
     )

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import im from "../../image/pic__COLOR_pic.png";
+import im from "../../images/pic__COLOR_pic.png";
 import "./MoviesCard.css";
 import { useLocation } from "react-router-dom";
 

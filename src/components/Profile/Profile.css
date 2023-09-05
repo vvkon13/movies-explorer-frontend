@@ -1,5 +1,5 @@
 .profile {
-    max-width: 470px;
+    max-width: 410px;
     padding: 74px 0 0 0;
     margin: 0 auto;
 }
@@ -31,7 +31,6 @@
 
 .profile__label_underlined {
     border-bottom: solid 1px #424242;
-    ;
 }
 
 .profile__input {
@@ -78,3 +77,48 @@
     font-weight: 500;
     line-height: normal;
 }
+
+@media (max-width:1024px) {
+    .profile {
+        max-width: 410px;
+        padding: 236px 0 0 0;
+    }
+
+    .profile__button-submit {
+        padding: 194px 0 16px 0;
+    }
+
+    .profile__title {
+        padding: 0 0 80px 0;
+    }
+    .profile__button-logoff {
+        padding: 0 0 269px 0;
+    }
+    
+}
+
+@media (max-width:564px) {
+    .profile {
+        max-width: 260px;
+        padding: 70px 0 0 0;
+    }
+    
+    .profile__title {
+        padding: 0 0 63px 0;
+    }
+    
+    .profile__label {
+        padding: 17px 0;
+    }
+    
+    .profile__button-submit {
+        padding: 362px 0 16px 0;
+        font-size: 12px;
+    }
+    
+    .profile__button-logoff {
+        padding: 0 0 40px 0;
+        font-size: 12px;
+    }
+}
+

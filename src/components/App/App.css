@@ -4,6 +4,7 @@
   font-family: 'Inter', 'Arial', sans-serif;
   position: relative;
   z-index: 1;
+  min-height: 100vh;
 }
 
 .app__header {
@@ -31,7 +32,7 @@
 }
 
 .app__portfolio {
-  margin-top: -18px; 
+  margin-top: -18px;
 }
 
 .app__main {
@@ -46,7 +47,8 @@
   .app__promo {
     margin: 14px auto 0 auto;
   }
+
   .app__portfolio {
-    margin-top: 40px; 
+    margin-top: 40px;
   }
 }

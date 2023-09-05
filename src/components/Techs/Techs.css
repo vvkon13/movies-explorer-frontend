@@ -141,9 +141,11 @@
     }
 
     .techs__cards {
+        max-width: 178px;
         padding: 50px 30px 70px 30px;
         margin: 0 auto;
         flex-wrap: wrap;
+        justify-content: flex-start;
     }
 
     .techs__card-title {

@@ -1,5 +1,4 @@
 import React from "react";
-import portfolioLink from "../../image/portfolio_link.svg";
 import "./Portfolio.css";
 
 function Portfolio() {
@@ -18,7 +17,7 @@ function Portfolio() {
                             Статичный сайт
                         </a>
                         <a href="https://github.com/" target="_blank" className="portfolio__link-icon app__link" rel="noopener noreferrer">
-                            <img src={portfolioLink} alt="Картинка ссылки" className="portfolio__icon" />
+                            ↗
                         </a>
                     </li>
                     <li className="portfolio__string-link portfolio__string-link_underlined">
@@ -26,7 +25,7 @@ function Portfolio() {
                             Адаптивный сайт
                         </a>
                         <a href="https://github.com/" target="_blank" className="portfolio__link-icon app__link" rel="noopener noreferrer">
-                            <img src={portfolioLink} alt="Картинка ссылки" className="portfolio__icon" />
+                            ↗
                         </a>
                     </li>
                     <li className="portfolio__string-link">
@@ -34,7 +33,7 @@ function Portfolio() {
                             Одностраничное приложение
                         </a>
                         <a href="https://github.com/" target="_blank" className="portfolio__link-icon app__link" rel="noopener noreferrer">
-                            <img src={portfolioLink} alt="Картинка ссылки" className="portfolio__icon" />
+                            ↗
                         </a>
                     </li>
                 </ul>

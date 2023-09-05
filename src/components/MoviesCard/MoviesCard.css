@@ -34,6 +34,8 @@
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    padding: 0;
+    margin: 0;
 }
 
 .card__duration-wrapper {
@@ -100,7 +102,7 @@
     height: 21px;
     width: 21px;
     background-color: transparent;
-    background-image: url("../../image/saved.svg");
+    background-image: url("../../images/saved.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-origin: content-box;
@@ -117,7 +119,7 @@
     height: 21px;
     width: 21px;
     background-color: transparent;
-    background-image: url("../../image/delete.svg");
+    background-image: url("../../images/delete.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-origin: content-box;

@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import { useContext } from "react";
-import { AppContext } from "../../contexts/AppContext";
 import useForm from "../../hooks/useForm";
 import LogoPreloader from "../LogoPreloader/LogoPreloader";
 import "./SignInUp.css";
@@ -31,7 +29,9 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
 
     return (
         <section className="sign-in-up">
-            <LogoPreloader className="sign-in-up__header-logo" />
+            <div className="sign-in-up__header-logo">
+            <LogoPreloader />
+            </div>
             <h2 className="sign-in-up__header-title">{title}</h2>
             <form name={formName} onSubmit={handleSubmit} className="sign-in-up__form">
                 <div className="sign-in-up__inputs">

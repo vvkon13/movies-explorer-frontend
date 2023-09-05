@@ -21,14 +21,14 @@ function Header({sayHi}) {
                 <nav>
                     <ul className='header__navbar-films'>
                         <li>
-                            <NavLink className='header__link'
+                            <NavLink className='header__link app__link'
                                 to='/movies'
                             >
                                 Фильмы
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink className='header__link'
+                            <NavLink className='header__link app__link'
                                 to='/saved-movies'
                             >
                                 Сохранённые фильмы
@@ -55,7 +55,9 @@ function Header({sayHi}) {
                 <nav>
                     <ul className='header__navbar-signinup'>
                         <li>
-                            <NavLink to='/signup' className='header__link'>
+                            <NavLink 
+                            to='/signup' 
+                            className='header__link app__link'>
                                 Регистрация
                             </NavLink>
                         </li>

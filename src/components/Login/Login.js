@@ -19,7 +19,7 @@ export function Login({ handleAuthorization }) {
             />
             <div className="login__footer">
                 <p className="login__link-text">Ещё не зарегистрированы?</p>
-                <Link to={'/sign-up'} className='login__link app__link'>Регистрация</Link>
+                <Link to={'/signup'} className='login__link app__link'>Регистрация</Link>
             </div>
         </>
     )

@@ -1,7 +1,6 @@
 .about {
     padding: 0px 70px;
     max-width: 1280px;
-    min-width: 320px;
     box-sizing: border-box;
 }
 
@@ -54,7 +53,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
-    /* 142.857% */
 }
 
 .scheme {
@@ -169,6 +167,7 @@
         font-size: 11px;
         line-height: 16px;
     }
+
     .scheme {
         padding: 60px 0 69px 0;
     }
@@ -177,5 +176,21 @@
     }
     .scheme__column-front {
         width: 65%;
+    }
+    .scheme__title-back {
+        padding: 11px 0;
+        font-size: 11px;
+    }
+    
+    .scheme__title-front {
+        padding: 11px 0;
+        font-size: 11px;
+    }
+    
+    .scheme__text {
+        padding: 10px 0 0 0;
+        font-size: 11px;
+        font-weight: 400;
+        line-height: normal;
     }
 }

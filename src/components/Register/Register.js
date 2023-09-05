@@ -13,13 +13,13 @@ export function Register({ handleRegistration }) {
         <>
             <SignInUp
                 formName={'register'}
-                title={'Регистрация'}
+                title={'Добро пожаловать!'}
                 buttonSubmitText={isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
                 onSignInUp={handleRegistration}
             />
             <div className="register__footer">
                 <p className="register__link-text">Уже зарегистрированы?</p>
-                <Link to={'/sign-in'} className='register__link app__link'>Войти</Link>
+                <Link to={'/signin'} className='register__link app__link'>Войти</Link>
             </div>
         </>
     )
