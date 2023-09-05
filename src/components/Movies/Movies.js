@@ -3,11 +3,11 @@ import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import "./Movies.css";
 
-function Movies() {
+function Movies({handleClickAdd}) {
     return (
         <div className="movies app__movies">
             <SearchForm />
-            <MoviesCardList />
+            <MoviesCardList handleClickAdd={handleClickAdd}/>
         </div>
     );
 }

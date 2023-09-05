@@ -71,6 +71,11 @@ function App() {
     setIsVisibleModalWindow(false);
   }
 
+  function handleClickAddMovies () {
+    setIsLoading(true);
+    setTimeout(setIsLoading(false), 1300);
+  }
+
   function sayHi() {
     setIsVisibleNavigation(!isVisibleNavigation);
   }
@@ -97,7 +102,7 @@ function App() {
           <Header sayHi={sayHi} />
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/movies" element={<Movies />} />
+            <Route path="/movies" element={<Movies handleClickAdd={handleClickAddMovies} />} />
             <Route path="/saved-movies" element={<SavedMovies />} />
             <Route path="/profile" element={
             <Profile 

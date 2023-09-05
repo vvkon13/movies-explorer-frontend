@@ -5,7 +5,7 @@ import { AppContext } from "../../contexts/AppContext";
 import MoviesCardAdd from "../MoviesCardAdd/MoviesCardAdd";
 import { useLocation } from "react-router-dom";
 
-function MoviesCardList() {
+function MoviesCardList({handleClickAdd}) {
     const card = { nameRU: "33 слова о дизайне", duration: 77 };
     const getFilms = (quantity, flag) => {
         let content = [];
@@ -25,7 +25,7 @@ function MoviesCardList() {
     return (
         <>
             <ul className="card-list">{getFilms(quantityFilms, flagMovies)}</ul>
-            {flagMovies && (<MoviesCardAdd />)}
+            {flagMovies && (<MoviesCardAdd onClick={handleClickAdd}/>)}
         </>
     );
 }
