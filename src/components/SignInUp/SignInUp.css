@@ -59,6 +59,10 @@
     color: #EE3465;
 }
 
+.sign-in-up__input_password:focus {
+    outline: 2px solid #EE3465;
+}
+
 .sign-in-up__button-submit {
     display: block;
     width: 100%;
@@ -90,22 +94,23 @@
         max-width: 260px;
         padding: 56px 0 0 0;
     }
+
     .sign-in-up__header-logo {
         display: flex;
         justify-content: center;
     }
-    
+
     .sign-in-up__header-title {
         padding: 50px 0 80px 0px;
         text-align: center;
     }
-    
+
     .sign-in-up__form {
         min-height: 468px;
     }
-    
+
     .sign-in-up__button-submit {
         font-size: 12px;
     }
-    
+
 }

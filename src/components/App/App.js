@@ -87,7 +87,7 @@ function App() {
   },[isScreenLg,isVisibleNavigation])
 
   return (
-    <div className="app">
+    <div className='app'>
       <AppContext.Provider
         value={
           {

@@ -32,12 +32,12 @@ function Profile({ handleChangeProfile, handleExitProfile }) {
             <form name="profile" onSubmit={handleSubmit} className="profile__form">
                 <div className="profile__inputs">
                     <label className="profile__label profile__label_underlined">Имя
-                        <input type="text" placeholder="Имя" className="profile__input"
+                        <input type="text" placeholder="Имя" className="profile__input app__input"
                             name="userName" minLength="2" maxLength="30"
                             value={values.userName ?? ''} onChange={handleChange} required />
                     </label>
                     <label className="profile__label">E-mail
-                        <input type="email" placeholder="Email" className="profile__input" name="userEmail"
+                        <input type="email" placeholder="Email" className="profile__input app__input" name="userEmail"
                             minLength="7" maxLength="40" onChange={handleChange}
                             value={values.userEmail ?? ''} required />
                     </label>

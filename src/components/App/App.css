@@ -27,6 +27,10 @@
   cursor: pointer;
 }
 
+.app__input:focus {
+  outline: 2px solid #4285F4;
+}
+
 .app__promo {
   margin: 20px auto 0 auto;
 }

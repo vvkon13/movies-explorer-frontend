@@ -37,13 +37,13 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
                 <div className="sign-in-up__inputs">
                 {isRegistration && (
                     <label className="sign-in-up__label">Имя
-                        <input type="text" placeholder="Имя" className="sign-in-up__input"
+                        <input type="text" placeholder="Имя" className="sign-in-up__input app__input"
                             name="userName" minLength="2" maxLength="30"
                             value={values.userName ?? ''} onChange={handleChange} required />
                     </label>
                 )}
                 <label className="sign-in-up__label">E-mail
-                    <input type="email" placeholder="Email" className="sign-in-up__input" name="userEmail"
+                    <input type="email" placeholder="Email" className="sign-in-up__input app__input" name="userEmail"
                         minLength="7" maxLength="40" onChange={handleChange}
                         value={values.userEmail ?? ''} required />
                 </label>
