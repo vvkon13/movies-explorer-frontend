@@ -1,5 +1,4 @@
 .header {
-    position: relative;
     display: flex;
     padding: 0px 70px;
     justify-content: space-between;
@@ -11,16 +10,11 @@
 }
 
 .header__navbar-films {
-    position: absolute;
-    left: 25%;
-    top: 0;
-    width: 50%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 16px;
-    padding: 0;
+    padding: 0 0 0 62px;
     margin: 0 auto;
     line-height: 0;
     list-style: none;
@@ -68,7 +62,6 @@
     font-style: normal;
     font-weight: 500;
     line-height: 16px;
-    /* 114.286% */
     border-style: none;
 }
 
@@ -100,7 +93,7 @@
     line-height: 16px;
 }
 
-@media (max-width:1024px) {
+@media (max-width:768px) {
     .header {
         padding: 0px 30px;
     }
