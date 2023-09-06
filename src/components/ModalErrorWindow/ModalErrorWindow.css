@@ -1,4 +1,4 @@
-.modal-window__wrapper {
+.invisible-hat {
     position: fixed;
     left: 0;
     top: 0;
@@ -9,7 +9,7 @@
     z-index: 3;
 }
 
-.modal-window__wrapper_opened {
+.invisible-hat_removed {
     visibility: visible;
     opacity: 1;
     background-color: rgba(0, 0, 0, .3);

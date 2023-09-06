@@ -8,14 +8,14 @@
     width: 1px;
 }
 
-.filter-checkbox {
+.filter-checkbox__icon {
     animation: change_fill-rect 2s;
     display: inline-block;
     margin: 0;
     padding: 0;
 }
 
-.filter-checkbox__container {
+.filter-checkbox {
     position: relative;
     display: flex;
     align-items: center;
@@ -31,16 +31,16 @@
     padding: 0;
 }
 
-.filter-checkbox__container:hover .filter-checkbox {
+.filter-checkbox:hover .filter-checkbox__icon {
     transform: scale(1.1);
 }
 
-.filter-checkbox__container .filter-checkbox {
+.filter-checkbox .filter-checkbox__icon {
     transition: transform 0.4s ease-in;
 }
 
 @media (max-width:564px) {
-    .filter-checkbox__container {
+    .filter-checkbox {
         gap: 13px;
         font-size: 11px;
     }

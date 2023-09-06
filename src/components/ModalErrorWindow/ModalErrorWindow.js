@@ -10,7 +10,7 @@ function ModalErrorWindow({ err, onClose }) {
         <section
             className=
             {
-                `modal-window__wrapper ${isVisibleModalWindow && 'modal-window__wrapper_opened'}`
+                `invisible-hat ${isVisibleModalWindow && 'invisible-hat_removed'}`
             }>
             <div className="modal-window">
                 <h2 className="modal-window__title">

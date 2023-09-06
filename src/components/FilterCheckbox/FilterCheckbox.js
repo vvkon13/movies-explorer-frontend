@@ -6,7 +6,7 @@ function FilterCheckbox() {
     const [isChecked, setIsChecked] = useState(false);
 
     return (
-        <label className="filter-checkbox__container app__button">
+        <label className="filter-checkbox app__button">
             <input
                 className="filter-checkbox__input"
                 type="checkbox"
@@ -15,7 +15,7 @@ function FilterCheckbox() {
                 }}
             />
             {isChecked && (<svg
-                className="filter-checkbox filter-checkbox_on"
+                className="filter-checkbox__icon"
                 aria-hidden="true"
                 width="36"
                 height="20"
@@ -26,7 +26,7 @@ function FilterCheckbox() {
                 <circle cx="28" cy="10" r="5" fill="white" />
             </svg>)}
             {!isChecked && (<svg
-                className="filter-checkbox filter-checkbox_off"
+                className="filter-checkbox__icon"
                 aria-hidden="true"
                 width="36"
                 height="20"
