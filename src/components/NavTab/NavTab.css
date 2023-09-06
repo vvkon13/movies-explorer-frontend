@@ -19,6 +19,10 @@
     font-style: normal;
     font-weight: 500;
     line-height: 16px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @media (max-width:564px) {

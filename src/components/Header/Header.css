@@ -50,6 +50,10 @@
 }
 
 .header__button-profile {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-width: 100px;
     min-height: 32px;
     text-align: center;
@@ -80,6 +84,10 @@
 }
 
 .header__button-signin {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-width: 76px;
     min-height: 32px;
     border-radius: 3px;

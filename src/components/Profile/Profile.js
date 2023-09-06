@@ -27,12 +27,12 @@ function Profile({ handleChangeProfile, handleExitProfile }) {
     }
 
     return (
-        <section className="profile">
-            <h2 className="profile__title">{`Привет, ${(currentUser.name === '') ? 'бро' : currentUser.name}!`}</h2>
+        <main className="profile">
+            <h1 className="profile__title">{`Привет, ${(currentUser.name === '') ? 'бро' : currentUser.name}!`}</h1>
             <form name="profile" onSubmit={handleSubmit} className="profile__form">
                 <div className="profile__inputs">
                     <label className="profile__label profile__label_underlined">Имя
-                        <input type="name" placeholder="Имя" className="profile__input"
+                        <input type="text" placeholder="Имя" className="profile__input"
                             name="userName" minLength="2" maxLength="30"
                             value={values.userName ?? ''} onChange={handleChange} required />
                     </label>
@@ -49,7 +49,7 @@ function Profile({ handleChangeProfile, handleExitProfile }) {
             <button className="profile__button-logoff app__button" type="button" onClick={handleExitProfile} >
                 Выйти из аккаунта
             </button>
-        </section>
+        </main>
     )
 }
 

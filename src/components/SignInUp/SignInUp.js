@@ -32,12 +32,12 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
             <div className="sign-in-up__header-logo">
             <LogoPreloader />
             </div>
-            <h2 className="sign-in-up__header-title">{title}</h2>
+            <h1 className="sign-in-up__header-title">{title}</h1>
             <form name={formName} onSubmit={handleSubmit} className="sign-in-up__form">
                 <div className="sign-in-up__inputs">
                 {isRegistration && (
                     <label className="sign-in-up__label">Имя
-                        <input type="name" placeholder="Имя" className="sign-in-up__input"
+                        <input type="text" placeholder="Имя" className="sign-in-up__input"
                             name="userName" minLength="2" maxLength="30"
                             value={values.userName ?? ''} onChange={handleChange} required />
                     </label>

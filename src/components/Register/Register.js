@@ -10,7 +10,7 @@ export function Register({ handleRegistration }) {
     /*     loggedIn ?
             <Navigate to='/main' replace /> : */
     
-        <section className="register">
+        <main className="register">
             <SignInUp
                 formName={'register'}
                 title={'Добро пожаловать!'}
@@ -21,7 +21,7 @@ export function Register({ handleRegistration }) {
                 <p className="register__link-text">Уже зарегистрированы?</p>
                 <Link to={'/signin'} className='register__link app__link'>Войти</Link>
             </div>
-        </section>
+        </main>
     )
 }
 

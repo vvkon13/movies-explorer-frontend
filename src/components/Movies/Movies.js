@@ -5,10 +5,10 @@ import "./Movies.css";
 
 function Movies({handleClickAdd}) {
     return (
-        <div className="movies app__movies">
+        <main className="movies app__movies">
             <SearchForm />
             <MoviesCardList handleClickAdd={handleClickAdd}/>
-        </div>
+        </main>
     );
 }
 

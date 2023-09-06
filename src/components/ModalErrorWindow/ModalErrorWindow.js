@@ -6,7 +6,7 @@ import "./ModalErrorWindow.css";
 function ModalErrorWindow({ err, onClose }) {
     const { currentUser } = useContext(CurrentUserContext);
     const { isVisibleModalWindow } = useContext(AppContext);
-    return  (
+    return (
         <section
             className=
             {
@@ -19,7 +19,11 @@ function ModalErrorWindow({ err, onClose }) {
                 <p className="modal-window__error">{err}</p>
                 <button
                     className="modal-window__button app__button"
-                    onClick={onClose} >Закрыть</button>
+                    onClick={onClose}
+                    type="button"
+                >
+                    Закрыть
+                </button>
             </div>
         </section>
     )

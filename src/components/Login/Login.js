@@ -10,7 +10,7 @@ export function Login({ handleAuthorization }) {
     /*     loggedIn ?
             <Navigate to='/main' replace /> : */
     
-        <section className="login">
+        <main className="login">
             <SignInUp
                 formName={'login'}
                 title={'Рады видеть!'}
@@ -21,7 +21,7 @@ export function Login({ handleAuthorization }) {
                 <p className="login__link-text">Ещё не зарегистрированы?</p>
                 <Link to={'/signup'} className='login__link app__link'>Регистрация</Link>
             </div>
-        </section>
+        </main>
     )
 }
 

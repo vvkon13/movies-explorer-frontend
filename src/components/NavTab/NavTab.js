@@ -7,29 +7,24 @@ function NavTab() {
         <nav>
             <ul className="navtab promo__navtab">
                 <li>
-                    <AnchorLink href="#AboutProject">
-                        <button className="navtab__button app__button">
+                    <AnchorLink href="#AboutProject" className="navtab__button app__button">
                             О проекте
-                        </button>
                     </AnchorLink>
                 </li>
                 <li>
-                    <AnchorLink href="#Techs">
-                        <button className="navtab__button app__button">
+                    <AnchorLink href="#Techs" className="navtab__button app__button">
                             Технологии
-                        </button>
                     </AnchorLink>
                 </li>
                 <li>
-                    <AnchorLink href="#AboutMe">
-                        <button className="navtab__button app__button">
+                    <AnchorLink href="#AboutMe" className="navtab__button app__button">
                             Студент
-                        </button>
                     </AnchorLink>
                 </li>
             </ul>
         </nav>
     );
 }
+
 
 export default NavTab;

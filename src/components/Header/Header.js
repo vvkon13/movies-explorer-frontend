@@ -39,8 +39,8 @@ function Header({sayHi}) {
             )}
             {loggedIn && isScreenLg && (
                 <nav>
-                    <Link to='/profile'>
-                        <button className="header__button-profile app__button" type="button" >Аккаунт</button>
+                    <Link to='/profile' className="header__button-profile app__button">
+                            Аккаунт
                     </Link>
                 </nav>
             )
@@ -62,19 +62,15 @@ function Header({sayHi}) {
                             </NavLink>
                         </li>
                         <li>
-                            <Link to='/signin'>
-                                <button className="header__button-signin app__button" type="button" >
+                            <Link to='/signin' className="header__button-signin app__button">
                                     Войти
-                                </button>
                             </Link>
                         </li>
                     </ul>
-
                 </nav>
             )}
         </header >
     );
 }
-
 
 export default Header;
