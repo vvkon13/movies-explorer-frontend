@@ -23,12 +23,13 @@ function MoviesCardList({handleClickAdd}) {
         quantityFilms = 5 + (isScreenSm && 3) + (isScreenLg && 4);
     }
     return (
-        <>
+        <section className="movies-card-list">
             <ul className="card-list">{getFilms(quantityFilms, flagMovies)}</ul>
             {flagMovies && (<MoviesCardAdd onClick={handleClickAdd}/>)}
-        </>
+        </section>
     );
 }
 
 export default MoviesCardList
+
 
