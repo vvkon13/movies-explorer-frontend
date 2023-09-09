@@ -4,6 +4,7 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import "./Movies.css";
 
 function Movies({handleClickAdd}) {
+    
     return (
         <main className="movies app__movies">
             <SearchForm />

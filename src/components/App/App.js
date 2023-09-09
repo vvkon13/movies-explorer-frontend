@@ -15,6 +15,8 @@ import Footer from '../Footer/Footer';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Navigation from '../Navigation/Navigation';
 import ModalErrorWindow from '../ModalErrorWindow/ModalErrorWindow';
+import { api } from '../../utils/MainApi';
+import { moviesApi } from '../../utils/MoviesApi';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -28,47 +30,65 @@ function App() {
 
   const navigate = useNavigate();
 
-  function handleRegistration({ email, name }) {
+  function handleRegistration({ password, email, name }) {
     setIsLoading(true);
-    setTimeout(()=>{
-      setCurrentUser({email, name});
-      setIsLoading(false);
-      navigate("/signin");
-    }, 1300);
+    api.signUp({ password, email, name })
+      .then(() => {
+        setCurrentUser({email, name});
+        navigate('/signin');
+      })
+      .catch((err) => {
+        openModalWindow(err.message || 'Ошибочка');
+      })
+      .finally(() => setIsLoading(false));
   }
 
-  function handleAuthorization({ email }) {
+  function handleAuthorization({ password, email }) {
     setIsLoading(true);
-    setTimeout(()=>{
-      if (email === currentUser.email) {
-        setLoggedIn(true);
-        setIsLoading(false);
-        navigate("/saved-movies");  
-      }
-      else {
-        setIsLoading(false);
-        setErr('Вы ввели неправильный логин или пароль.');
-        setIsVisibleModalWindow(true);
-      }
-      setIsLoading(false);
-    }, 1300);
+    api.signIn({ password, email })
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+          api.getUserInformation()
+          .then((user)=>{
+            setCurrentUser(user);
+            setLoggedIn(true);
+            navigate('/');
+          })
+        }
+      })
+      .catch((err) => {
+        openModalWindow(err.message || 'Ошибочка');
+      })
+      .finally(() => setIsLoading(false));
   }
 
   function handleExitProfile() {
     setLoggedIn(false);
+    setCurrentUser(initialStateCurrentUser);
+    localStorage.removeItem('token');
     navigate("/");
   }
  
   function handleChangeProfile({ email, name }) {
     setIsLoading(true);
-    setTimeout(()=>{
+    api.setUserInformation({ email, name })
+    .then(() => {
       setCurrentUser({email, name});
-      setIsLoading(false);
-    }, 1300);
+    })
+    .catch((err) => {
+      openModalWindow(err.message || 'Ошибочка');
+    })
+    .finally(() => setIsLoading(false));
   }
 
   function handleCloseModalWindow () {
     setIsVisibleModalWindow(false);
+  }
+
+  function openModalWindow(message) {
+    setErr(message);
+    setIsVisibleModalWindow(true);
   }
 
   function handleClickAddMovies () {
