@@ -1,0 +1,116 @@
+.sign-in-up {
+    max-width: 396px;
+    padding: 70px 0 0 0;
+    margin: 0 auto;
+}
+
+.sign-in-up__header-title {
+    padding: 40px 0px;
+    margin: 0;
+    color: #FFF;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+
+}
+
+.sign-in-up__form {
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sign-in-up__label {
+    color: #8B8B8B;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 0 0 20px 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 68px;
+}
+
+.sign-in-up__input {
+    width: 100%;
+    display: block;
+    padding: 0 15px;
+    border-radius: 8px;
+    background: #2F2F2F;
+    min-height: 46px;
+    color: #FFF;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    box-sizing: border-box;
+    border-style: none;
+}
+
+.sign-in-up__input_password {
+    color: #EE3465;
+}
+
+.sign-in-up__input_password:focus {
+    outline: 2px solid #EE3465;
+}
+
+.sign-in-up__button-submit {
+    display: block;
+    width: 100%;
+    border-radius: 3px;
+    background: #4285F4;
+    min-height: 45px;
+    padding: 13px 0 15px 0;
+    text-align: center;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0 auto;
+    box-sizing: border-box;
+    border-style: none;
+}
+
+@media (max-width:1024px) {
+    .sign-in-up {
+        padding: 232px 0 0 0;
+    }
+}
+
+@media (max-width:564px) {
+    .sign-in-up {
+        max-width: 260px;
+        padding: 56px 0 0 0;
+    }
+
+    .sign-in-up__header-logo {
+        display: flex;
+        justify-content: center;
+    }
+
+    .sign-in-up__header-title {
+        padding: 50px 0 80px 0px;
+        text-align: center;
+    }
+
+    .sign-in-up__form {
+        min-height: 468px;
+    }
+
+    .sign-in-up__button-submit {
+        font-size: 12px;
+    }
+
+}

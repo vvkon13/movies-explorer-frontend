@@ -1,0 +1,142 @@
+.navigation {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 3;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.navigation_opened {
+    visibility: visible;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, .3);
+}
+
+.navigation__visible {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    background: #202020;
+    min-width: 520px;
+    box-sizing: border-box;
+    z-index: 3;
+}
+
+.navigation__links {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0;
+    padding: 159px 0 90px 0;
+    box-sizing: border-box;
+}
+
+ .navigation__header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+}
+
+.navigation__link {
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.navigation__link.active {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 2px;
+}
+
+.navigation__footer {
+    display: flex;
+    justify-content: center;
+}
+
+.navigation__buttopn-link {
+    text-decoration: none;
+    color: #FFF;
+    margin: 0;
+    padding: 0;
+}
+
+.navigation__button-profile {
+    margin: 0;
+    padding: 0;
+    width: 100px;
+    height: 32px;
+    border-radius: 20px;
+    background: #313131;
+    border-style: none;
+    text-align: center;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    color: #FFF;
+}
+
+.navigation__buttopn-link.active .navigation__button-profile {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+}
+
+.navigation__button-close {
+    position: absolute;
+    right: 22px;
+    top: 22px;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    background-image: url(../../images/close.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    background-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+@media (max-width:564px) {
+
+    .navigation__visible {
+        min-width: 320px;
+    }
+    
+    .navigation__links {
+        padding: 144px 0 46px 0;
+    }
+    
+     .navigation__header {
+        gap: 24px;
+    }
+    
+    .navigation__link.active {
+        text-underline-offset: 7px;
+    }
+
+    .navigation__button-close {
+        right: 13px;
+        top: 13px;
+    }
+}
