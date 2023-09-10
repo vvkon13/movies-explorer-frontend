@@ -21,6 +21,11 @@
   cursor: pointer;
 }
 
+.app__button:disabled {
+  color:#333333;
+  border-color: #333333;
+}
+
 .app__link:hover {
   opacity: 0.7;
   transition: opacity 100ms ease-in;

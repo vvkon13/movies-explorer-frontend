@@ -1,31 +1,38 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
-import { AppContext } from "../../contexts/AppContext";
 import MoviesCardAdd from "../MoviesCardAdd/MoviesCardAdd";
-import { useLocation } from "react-router-dom";
 
-function MoviesCardList({handleClickAdd}) {
-    const card = { nameRU: "33 слова о дизайне", duration: 77 };
-    const getFilms = (quantity, flag) => {
+function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards }) {
+    const [flagAddMovies, setFlagAddMovies] = useState(false);
+
+    useEffect(() => {
+        setFlagAddMovies((arrayOfCards.length > 0) &&
+            (arrayOfCards.length > arrayIndexesCardsOnTable[arrayIndexesCardsOnTable.length - 1] + 1));
+    }, [arrayIndexesCardsOnTable, arrayOfCards])
+
+    const getFilms = (flag) => {
         let content = [];
-        for (let i = 0; i < quantity; i++) {
-            content.push(<li key={i}><MoviesCard card={card} cardLikedStatus={!flag} /></li>);
+        for (let i = 0; i < arrayIndexesCardsOnTable.length; i++) {
+            content.push(
+                <li
+                    key={i}>
+                    <MoviesCard
+                        card={arrayOfCards[arrayIndexesCardsOnTable[i]]}
+                        cardLikedStatus={!flag}
+                    />
+                </li>);
         }
         return content;
     };
-    const { isScreenSm, isScreenLg } = useContext(AppContext);
-    let location = useLocation();
-    let flagMovies = false;
-    let quantityFilms = 3
-    if (location.pathname === "/movies") {
-        flagMovies = true;
-        quantityFilms = 5 + (isScreenSm && 3) + (isScreenLg && 4);
-    }
+    
     return (
         <section className="movies-card-list">
-            <ul className="card-list">{getFilms(quantityFilms, flagMovies)}</ul>
-            {flagMovies && (<MoviesCardAdd onClick={handleClickAdd}/>)}
+            <ul className="card-list">{getFilms(true)}</ul>
+            {flagAddMovies && (<MoviesCardAdd
+                onClick={handleClickAdd}
+                flagAddMovies={flagAddMovies}
+            />)}
         </section>
     );
 }

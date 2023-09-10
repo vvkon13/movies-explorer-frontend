@@ -20,21 +20,99 @@ import { moviesApi } from '../../utils/MoviesApi';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const { isScreenSm, isScreenLg } = useResize();
+  const { isScreenSm, isScreenLg, isScreenXl } = useResize();
   const [isLoading, setIsLoading] = useState(false);
   const initialStateCurrentUser = { name: '', email: '' };
   const [currentUser, setCurrentUser] = useState(initialStateCurrentUser);
   const [isVisibleNavigation, setIsVisibleNavigation] = useState(false);
   const [isVisibleModalWindow, setIsVisibleModalWindow] = useState(false);
+  const [isCheckedShortFilmMovies, setIsCheckedShortFilmMovies]
+    = useState(/^true$/i.test(localStorage.getItem('isCheckedCheckboxShortFilmMovies')));
+  const [arrayIndexesCardsOnTableMovies, setArrayIndexesCardsOnTableMovies] = useState([]);
+  const [arrayOfCardsMovies, setArrayOfCardsMovies] = useState([]);
   const [err, setErr] = useState('');
-
   const navigate = useNavigate();
+
+  function updateCardList(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms) {
+    if (arrayResults.length === 0) return [];
+    let maxItemPutOnTable = 0;
+    let i = 0;
+    let arr = [...arrayIndexesAlreadyDisplayed];
+    if (arrayIndexesAlreadyDisplayed.length === 0) {
+      maxItemPutOnTable = 5 + (isScreenSm && 3) + (isScreenXl && 4)
+    }
+    else {
+      maxItemPutOnTable = 2 + (isScreenXl && 1);
+      i = arrayIndexesAlreadyDisplayed[arrayIndexesAlreadyDisplayed.length - 1] + 1;
+    }
+    while ((i < arrayResults.length) && (maxItemPutOnTable > 0)) {
+      if (isShortFilms) {
+        if (arrayResults[i].duration < 40) {
+          arr.push(i);
+          maxItemPutOnTable--;
+        }
+      }
+      else {
+        arr.push(i);
+        maxItemPutOnTable--;
+      }
+      i++;
+    };
+    return arr;
+  }
+
+  function handleSearchFilmsMovies({ requestText }) {
+    setIsLoading(true);
+    localStorage.setItem('requestText', requestText);
+    moviesApi.getMovies()
+      .then((data) => {
+        let arr = [];
+        if (requestText !== "**") {
+          const requestTextUpperCase = requestText.toUpperCase();
+          arr = data.filter(item => ((item.nameRU.toUpperCase().includes(requestTextUpperCase))
+            || (item.nameEN.includes(requestTextUpperCase))));
+        } else { arr = [...data]; }
+        setArrayIndexesCardsOnTableMovies(updateCardList(
+          [],
+          arr,
+          isCheckedShortFilmMovies
+        ));
+        setArrayOfCardsMovies(arr);
+      })
+      .catch(() => {
+        openModalWindow("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+      })
+      .finally(() => setIsLoading(false));
+  }
+
+  function handleChangeCneckboxMovies() {
+    setIsCheckedShortFilmMovies((prevIsCheckedShortFilmMovies) => {
+      setArrayIndexesCardsOnTableMovies(updateCardList(
+        [],
+        arrayOfCardsMovies,
+        !prevIsCheckedShortFilmMovies
+      ));
+      localStorage.setItem('isCheckedCheckboxShortFilmMovies', !prevIsCheckedShortFilmMovies);
+      return !prevIsCheckedShortFilmMovies
+    })
+  }
+
+  function handleClickAddMovies() {
+    setIsLoading(true);
+    setArrayIndexesCardsOnTableMovies(updateCardList(
+      arrayIndexesCardsOnTableMovies,
+      arrayOfCardsMovies,
+      isCheckedShortFilmMovies
+    ));
+    setIsLoading(false);
+  }
+
 
   function handleRegistration({ password, email, name }) {
     setIsLoading(true);
     api.signUp({ password, email, name })
       .then(() => {
-        setCurrentUser({email, name});
+        setCurrentUser({ email, name });
         navigate('/signin');
       })
       .catch((err) => {
@@ -50,11 +128,11 @@ function App() {
         if (data.token) {
           localStorage.setItem('token', data.token);
           api.getUserInformation()
-          .then((user)=>{
-            setCurrentUser(user);
-            setLoggedIn(true);
-            navigate('/');
-          })
+            .then((user) => {
+              setCurrentUser(user);
+              setLoggedIn(true);
+              navigate('/');
+            })
         }
       })
       .catch((err) => {
@@ -69,20 +147,20 @@ function App() {
     localStorage.removeItem('token');
     navigate("/");
   }
- 
+
   function handleChangeProfile({ email, name }) {
     setIsLoading(true);
     api.setUserInformation({ email, name })
-    .then(() => {
-      setCurrentUser({email, name});
-    })
-    .catch((err) => {
-      openModalWindow(err.message || 'Ошибочка');
-    })
-    .finally(() => setIsLoading(false));
+      .then(() => {
+        setCurrentUser({ email, name });
+      })
+      .catch((err) => {
+        openModalWindow(err.message || 'Ошибочка');
+      })
+      .finally(() => setIsLoading(false));
   }
 
-  function handleCloseModalWindow () {
+  function handleCloseModalWindow() {
     setIsVisibleModalWindow(false);
   }
 
@@ -91,20 +169,17 @@ function App() {
     setIsVisibleModalWindow(true);
   }
 
-  function handleClickAddMovies () {
-    setIsLoading(true);
-    setTimeout(setIsLoading(false), 1300);
-  }
+
 
   function sayHi() {
     setIsVisibleNavigation(!isVisibleNavigation);
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     if (isScreenLg && isVisibleNavigation) {
       setIsVisibleNavigation(false)
     }
-  },[isScreenLg,isVisibleNavigation])
+  }, [isScreenLg, isVisibleNavigation])
 
   return (
     <div className='app'>
@@ -122,18 +197,27 @@ function App() {
           <Header sayHi={sayHi} />
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/movies" element={<Movies handleClickAdd={handleClickAddMovies} />} />
+            <Route
+              path="/movies"
+              element={<Movies
+                handleClickAdd={handleClickAddMovies}
+                handleSearchFilms={handleSearchFilmsMovies}
+                handleChangeCneckboxMovies={handleChangeCneckboxMovies}
+                isCheckedShortFilmMovies={isCheckedShortFilmMovies}
+                arrayIndexesCardsOnTableMovies={arrayIndexesCardsOnTableMovies}
+                arrayOfCardsMovies={arrayOfCardsMovies}
+              />} />
             <Route path="/saved-movies" element={<SavedMovies />} />
             <Route path="/profile" element={
-            <Profile 
-            handleChangeProfile={handleChangeProfile}
-            handleExitProfile={handleExitProfile} />} />
+              <Profile
+                handleChangeProfile={handleChangeProfile}
+                handleExitProfile={handleExitProfile} />} />
             <Route path="/signin" element={<Login handleAuthorization={handleAuthorization} />} />
             <Route path="/signup" element={<Register handleRegistration={handleRegistration} />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
           <Footer />
-          <ModalErrorWindow err={err} onClose={handleCloseModalWindow}/>
+          <ModalErrorWindow err={err} onClose={handleCloseModalWindow} />
           <Navigation onClose={sayHi} />
         </CurrentUserContext.Provider>
       </AppContext.Provider>

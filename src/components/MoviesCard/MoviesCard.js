@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import im from "../../images/pic__COLOR_pic.png";
 import "./MoviesCard.css";
 import { useLocation } from "react-router-dom";
 
@@ -14,7 +13,7 @@ function MoviesCard({ card, cardLikedStatus }) {
 
     return (
         <div className="card">
-            <img src={im} alt={`Фото ${card.nameRU}`} className="card__photo" onClick={handleClick} />
+            <img src={` https://api.nomoreparties.co${card.image.url}`} alt={`Фото ${card.nameRU}`} className="card__photo" onClick={handleClick} />
             <div className="card__description">
                 <h2 className="card__name">{card.nameRU}</h2>
                 <div className="card__duration-wrapper">

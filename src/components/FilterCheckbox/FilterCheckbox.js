@@ -1,18 +1,14 @@
 import React from "react";
-import { useState } from "react";
 import "./FilterCheckbox.css";
 
-function FilterCheckbox() {
-    const [isChecked, setIsChecked] = useState(false);
+function FilterCheckbox({handleChange,isChecked}) {
 
     return (
         <label className="filter-checkbox app__button">
             <input
                 className="filter-checkbox__input"
                 type="checkbox"
-                onChange={() => {
-                    setIsChecked(!isChecked);
-                }}
+                onChange={handleChange}
             />
             {isChecked && (<svg
                 className="filter-checkbox__icon"
