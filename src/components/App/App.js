@@ -27,14 +27,14 @@ function App() {
   const [isVisibleNavigation, setIsVisibleNavigation] = useState(false);
   const [isVisibleModalWindow, setIsVisibleModalWindow] = useState(false);
   const [isCheckedShortFilmMovies, setIsCheckedShortFilmMovies]
-    = useState(/^true$/i.test(localStorage.getItem('isCheckedCheckboxShortFilmMovies')));
+    = useState(false);
   const [arrayIndexesCardsOnTableMovies, setArrayIndexesCardsOnTableMovies] = useState([]);
-  const [arrayOfCardsMovies, setArrayOfCardsMovies] = useState([]);
+  const [arrayOfCardsMovies, setArrayOfCardsMovies] = useState(null);
   const [err, setErr] = useState('');
   const navigate = useNavigate();
 
   function updateCardList(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms) {
-    if (arrayResults.length === 0) return [];
+    if ((arrayResults === null) || (arrayResults.length === 0)) return [];
     let maxItemPutOnTable = 0;
     let i = 0;
     let arr = [...arrayIndexesAlreadyDisplayed];
@@ -72,12 +72,11 @@ function App() {
           arr = data.filter(item => ((item.nameRU.toUpperCase().includes(requestTextUpperCase))
             || (item.nameEN.includes(requestTextUpperCase))));
         } else { arr = [...data]; }
-        setArrayIndexesCardsOnTableMovies(updateCardList(
-          [],
-          arr,
-          isCheckedShortFilmMovies
-        ));
+        let indexArr = updateCardList([], arr, isCheckedShortFilmMovies);
+        setArrayIndexesCardsOnTableMovies(indexArr);
         setArrayOfCardsMovies(arr);
+        localStorage.setItem('arrayIndexesCardsOnTableMovies', JSON.stringify(indexArr));
+        localStorage.setItem('arrayOfCardsMovies', JSON.stringify(arr));
       })
       .catch(() => {
         openModalWindow("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
@@ -87,12 +86,14 @@ function App() {
 
   function handleChangeCneckboxMovies() {
     setIsCheckedShortFilmMovies((prevIsCheckedShortFilmMovies) => {
-      setArrayIndexesCardsOnTableMovies(updateCardList(
+      let indexArr = updateCardList(
         [],
         arrayOfCardsMovies,
         !prevIsCheckedShortFilmMovies
-      ));
+      );
+      setArrayIndexesCardsOnTableMovies(indexArr);
       localStorage.setItem('isCheckedCheckboxShortFilmMovies', !prevIsCheckedShortFilmMovies);
+      localStorage.setItem('arrayIndexesCardsOnTableMovies', JSON.stringify(indexArr));
       return !prevIsCheckedShortFilmMovies
     })
   }
@@ -107,6 +108,20 @@ function App() {
     setIsLoading(false);
   }
 
+  function handleRequestDataRecovery() {
+    console.log('Восстанавливаем данные...')
+    if (localStorage.getItem('arrayOfCardsMovies')) {
+      setArrayOfCardsMovies(JSON.parse(localStorage.getItem('arrayOfCardsMovies')));
+    }
+    if (localStorage.getItem('arrayIndexesCardsOnTableMovies')) {
+      setArrayIndexesCardsOnTableMovies(JSON.parse(localStorage.getItem('arrayIndexesCardsOnTableMovies')));
+    }
+    if (localStorage.getItem('isCheckedCheckboxShortFilmMovies')) {
+      console.log(localStorage.getItem('isCheckedCheckboxShortFilmMovies'));
+      console.log((localStorage.getItem('isCheckedCheckboxShortFilmMovies') === 'true'));
+      setIsCheckedShortFilmMovies((localStorage.getItem('isCheckedCheckboxShortFilmMovies') === 'true'));
+    }
+  }
 
   function handleRegistration({ password, email, name }) {
     setIsLoading(true);
@@ -206,6 +221,7 @@ function App() {
                 isCheckedShortFilmMovies={isCheckedShortFilmMovies}
                 arrayIndexesCardsOnTableMovies={arrayIndexesCardsOnTableMovies}
                 arrayOfCardsMovies={arrayOfCardsMovies}
+                handleRequestDataRecovery={handleRequestDataRecovery}
               />} />
             <Route path="/saved-movies" element={<SavedMovies />} />
             <Route path="/profile" element={

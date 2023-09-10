@@ -7,7 +7,8 @@ function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards
     const [flagAddMovies, setFlagAddMovies] = useState(false);
 
     useEffect(() => {
-        setFlagAddMovies((arrayOfCards.length > 0) &&
+        setFlagAddMovies((arrayOfCards !== null) &&
+            (arrayOfCards.length > 0) &&
             (arrayOfCards.length > arrayIndexesCardsOnTable[arrayIndexesCardsOnTable.length - 1] + 1));
     }, [arrayIndexesCardsOnTable, arrayOfCards])
 
@@ -25,7 +26,7 @@ function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards
         }
         return content;
     };
-    
+
     return (
         <section className="movies-card-list">
             <ul className="card-list">{getFilms(true)}</ul>

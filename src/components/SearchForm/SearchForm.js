@@ -3,16 +3,16 @@ import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import "./SearchForm.css";
 import useForm from "../../hooks/useForm";
 
-function SearchForm({ onSubmitForm, onChangeCheckbox, isCheckedShortFilmMovies,initialRequestText }) {
-    const { values,setValues, handleChange } = useForm();
-    
+function SearchForm({ onSubmitForm, onChangeCheckbox, isCheckedShortFilmMovies, initialRequestText }) {
+    const { values, setValues, handleChange } = useForm();
+
     useEffect(() => {
         setValues({
             ...values,
             requestText: initialRequestText
         })
-    }, []);
-
+    },[])
+    
     function handleSubmit(evt) {
         evt.preventDefault();
         onSubmitForm({

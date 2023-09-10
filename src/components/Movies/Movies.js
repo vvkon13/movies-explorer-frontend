@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import "./Movies.css";
@@ -9,9 +9,15 @@ function Movies({
     handleChangeCneckboxMovies,
     isCheckedShortFilmMovies,
     arrayIndexesCardsOnTableMovies,
-    arrayOfCardsMovies
+    arrayOfCardsMovies,
+    handleRequestDataRecovery
 }) {
     const initialRequestText = localStorage.getItem('requestText') ?? '';
+    useEffect(() => {
+        if ((initialRequestText) && (arrayOfCardsMovies === null)) {
+            handleRequestDataRecovery();
+        }
+    }, []);
 
     return (
         <main className="movies app__movies">
@@ -20,11 +26,11 @@ function Movies({
                 onChangeCheckbox={handleChangeCneckboxMovies}
                 isCheckedShortFilmMovies={isCheckedShortFilmMovies}
                 initialRequestText={initialRequestText}
-                 />
-            <MoviesCardList 
-            handleClickAdd={handleClickAdd}
-            arrayIndexesCardsOnTable ={arrayIndexesCardsOnTableMovies}
-            arrayOfCards = {arrayOfCardsMovies} 
+            />
+            <MoviesCardList
+                handleClickAdd={handleClickAdd}
+                arrayIndexesCardsOnTable={arrayIndexesCardsOnTableMovies}
+                arrayOfCards={arrayOfCardsMovies}
             />
         </main>
     );
