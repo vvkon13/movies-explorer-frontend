@@ -31,7 +31,7 @@ function SearchForm({ onSubmitForm, onChangeCheckbox, isCheckedShortFilmMovies, 
                         name="requestText"
                         minLength="2"
                         maxLength="100"
-                        value={values.requestText}
+                        value={values.requestText ?? ''}
                         onChange={handleChange}
                         required />
                     <button

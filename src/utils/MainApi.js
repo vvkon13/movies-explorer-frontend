@@ -45,13 +45,12 @@ class MainApi {
         image,
         trailerLink,
         thumbnail,
-        owner,
         movieId,
         nameRU,
         nameEN
     }) {
         const token = localStorage.getItem('token');
-        return this._request('/cards', {
+        return this._request('/movies', {
             method: 'POST',
             headers: Object.assign(this.headers, { "Authorization": `Bearer ${token}` }),
             body: JSON.stringify({
@@ -63,7 +62,6 @@ class MainApi {
                 image,
                 trailerLink,
                 thumbnail,
-                owner,
                 movieId,
                 nameRU,
                 nameEN
@@ -73,7 +71,7 @@ class MainApi {
 
     deleteMovie(movieId) {
         const token = localStorage.getItem('token');
-        return this._request(`/cards/${movieId}`, {
+        return this._request(`/movies/${movieId}`, {
             method: 'DELETE',
             headers: Object.assign(this.headers, { "Authorization": `Bearer ${token}` })
         });
@@ -122,4 +120,5 @@ export const api = new MainApi({
     headers: {
         'Content-Type': 'application/json'
     }
+    
 });

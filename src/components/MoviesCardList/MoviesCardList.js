@@ -3,7 +3,7 @@ import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import MoviesCardAdd from "../MoviesCardAdd/MoviesCardAdd";
 
-function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards }) {
+function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards, handleMovieStatusUpdate }) {
     const [flagAddMovies, setFlagAddMovies] = useState(false);
 
     useEffect(() => {
@@ -12,7 +12,7 @@ function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards
             (arrayOfCards.length > arrayIndexesCardsOnTable[arrayIndexesCardsOnTable.length - 1] + 1));
     }, [arrayIndexesCardsOnTable, arrayOfCards])
 
-    const getFilms = (flag) => {
+    const getFilms = () => {
         let content = [];
         for (let i = 0; i < arrayIndexesCardsOnTable.length; i++) {
             content.push(
@@ -20,7 +20,7 @@ function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards
                     key={i}>
                     <MoviesCard
                         card={arrayOfCards[arrayIndexesCardsOnTable[i]]}
-                        cardLikedStatus={!flag}
+                        handleMovieStatusUpdate={handleMovieStatusUpdate}
                     />
                 </li>);
         }
@@ -29,7 +29,7 @@ function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards
 
     return (
         <section className="movies-card-list">
-            <ul className="card-list">{getFilms(true)}</ul>
+            <ul className="card-list">{getFilms()}</ul>
             {flagAddMovies && (<MoviesCardAdd
                 onClick={handleClickAdd}
                 flagAddMovies={flagAddMovies}

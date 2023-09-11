@@ -17,6 +17,7 @@ import Navigation from '../Navigation/Navigation';
 import ModalErrorWindow from '../ModalErrorWindow/ModalErrorWindow';
 import { api } from '../../utils/MainApi';
 import { moviesApi } from '../../utils/MoviesApi';
+import { ProtectedRoute } from "../ProtectedRoute";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -30,6 +31,13 @@ function App() {
     = useState(false);
   const [arrayIndexesCardsOnTableMovies, setArrayIndexesCardsOnTableMovies] = useState([]);
   const [arrayOfCardsMovies, setArrayOfCardsMovies] = useState(null);
+
+
+  const [isCheckedShortFilmSavedMovies, setIsCheckedShortFilmSavedMovies]
+    = useState(false);
+  const [arrayIndexesCardsOnTableSavedMovies, setArrayIndexesCardsOnTableSavedMovies] = useState([]);
+  const [arrayOfCardsSavedMovies, setArrayOfCardsSavedMovies] = useState(null);
+
   const [err, setErr] = useState('');
   const navigate = useNavigate();
 
@@ -64,21 +72,38 @@ function App() {
   function handleSearchFilmsMovies({ requestText }) {
     setIsLoading(true);
     localStorage.setItem('requestText', requestText);
-    moviesApi.getMovies()
-      .then((data) => {
+    Promise.all([moviesApi.getMovies(), api.getMovies()])
+      .then(([data, dataSaved]) => {
         let arr = [];
+        let arr2 = [];
         if (requestText !== "**") {
           const requestTextUpperCase = requestText.toUpperCase();
           arr = data.filter(item => ((item.nameRU.toUpperCase().includes(requestTextUpperCase))
-            || (item.nameEN.includes(requestTextUpperCase))));
+            || (item.nameEN.includes(requestTextUpperCase))))
         } else { arr = [...data]; }
-        let indexArr = updateCardList([], arr, isCheckedShortFilmMovies);
+        arr2 = arr.map(item => {
+          if (dataSaved.length === 0) {
+            item.liked = false;
+          }
+          else if (dataSaved.find(element => element.movieId === item.id)) {
+            item.liked = true;
+          }
+          else {
+            item.liked = false;
+          }
+          item.thumbnail = `https://api.nomoreparties.co${item.image.formats.thumbnail.url}`;
+          item.image = `https://api.nomoreparties.co${item.image.url}`;
+          return item;
+        });
+        console.log(arr2);
+        let indexArr = updateCardList([], arr2, isCheckedShortFilmMovies);
         setArrayIndexesCardsOnTableMovies(indexArr);
-        setArrayOfCardsMovies(arr);
+        setArrayOfCardsMovies(arr2);
         localStorage.setItem('arrayIndexesCardsOnTableMovies', JSON.stringify(indexArr));
-        localStorage.setItem('arrayOfCardsMovies', JSON.stringify(arr));
+        localStorage.setItem('arrayOfCardsMovies', JSON.stringify(arr2));
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         openModalWindow("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
       })
       .finally(() => setIsLoading(false));
@@ -159,7 +184,7 @@ function App() {
   function handleExitProfile() {
     setLoggedIn(false);
     setCurrentUser(initialStateCurrentUser);
-    localStorage.removeItem('token');
+    clearingLocalStorage();
     navigate("/");
   }
 
@@ -184,11 +209,81 @@ function App() {
     setIsVisibleModalWindow(true);
   }
 
-
-
   function sayHi() {
     setIsVisibleNavigation(!isVisibleNavigation);
   }
+
+  function handleMovieStatusUpdate(card) {
+    setIsLoading(true)
+    if (card.liked === true) {
+      api.deleteMovie(card.id)
+        .then(() => {
+          card.liked = false;
+          localStorage.setItem('arrayOfCardsMovies', JSON.stringify(arrayOfCardsMovies));
+        })
+        .catch((err) => {
+          openModalWindow(err.message || 'Ошибочка');
+        })
+        .finally(() => {
+          setIsLoading(false)
+        });
+    } else {
+      api.addMovie({
+        country: card.country,
+        director: card.director,
+        duration: card.duration,
+        year: card.year,
+        description: card.description,
+        image: card.image,
+        trailerLink: card.trailerLink,
+        thumbnail: card.thumbnail,
+        movieId: card.id,
+        nameRU: card.nameRU,
+        nameEN: card.nameEN
+      })
+        .then(() => {
+          card.liked = true;
+          localStorage.setItem('arrayOfCardsMovies', JSON.stringify(arrayOfCardsMovies));
+        })
+        .catch((err) => {
+          openModalWindow(err.message || 'Ошибочка');
+        })
+        .finally(() => {
+          setIsLoading(false)
+        });
+    }
+  }
+
+  function clearingLocalStorage() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('requestText');
+    localStorage.removeItem('arrayOfCardsMovies');
+    localStorage.removeItem('arrayIndexesCardsOnTableMovies');
+    localStorage.removeItem('isCheckedCheckboxShortFilmMovies');
+
+  }
+
+  const tockenCheck = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoading(true);
+      api.keyAuthentication(token)
+        .then(({ email, name }) => {
+          setCurrentUser({ email, name });
+          setLoggedIn(true);
+          navigate('/');
+        })
+        .catch(() => {
+          clearingLocalStorage();
+        })
+        .finally(() => setIsLoading(false));
+    }
+    clearingLocalStorage();
+  }
+
+  useEffect(() => {
+    tockenCheck();
+  }, []);
 
   useEffect(() => {
     if (isScreenLg && isVisibleNavigation) {
@@ -214,20 +309,34 @@ function App() {
             <Route path="/" element={<Main />} />
             <Route
               path="/movies"
-              element={<Movies
-                handleClickAdd={handleClickAddMovies}
-                handleSearchFilms={handleSearchFilmsMovies}
-                handleChangeCneckboxMovies={handleChangeCneckboxMovies}
-                isCheckedShortFilmMovies={isCheckedShortFilmMovies}
-                arrayIndexesCardsOnTableMovies={arrayIndexesCardsOnTableMovies}
-                arrayOfCardsMovies={arrayOfCardsMovies}
-                handleRequestDataRecovery={handleRequestDataRecovery}
-              />} />
-            <Route path="/saved-movies" element={<SavedMovies />} />
-            <Route path="/profile" element={
-              <Profile
-                handleChangeProfile={handleChangeProfile}
-                handleExitProfile={handleExitProfile} />} />
+              element={
+                <ProtectedRoute
+                  element={Movies}
+                  handleClickAdd={handleClickAddMovies}
+                  handleSearchFilms={handleSearchFilmsMovies}
+                  handleChangeCneckboxMovies={handleChangeCneckboxMovies}
+                  isCheckedShortFilmMovies={isCheckedShortFilmMovies}
+                  arrayIndexesCardsOnTableMovies={arrayIndexesCardsOnTableMovies}
+                  arrayOfCardsMovies={arrayOfCardsMovies}
+                  handleRequestDataRecovery={handleRequestDataRecovery}
+                  handleMovieStatusUpdate={handleMovieStatusUpdate}
+                />} />
+            <Route
+              path="/saved-movies"
+              element={
+                <ProtectedRoute
+                  element={SavedMovies}
+                />}
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute
+                  element={Profile}
+                  handleChangeProfile={handleChangeProfile}
+                  handleExitProfile={handleExitProfile}
+                />}
+            />
             <Route path="/signin" element={<Login handleAuthorization={handleAuthorization} />} />
             <Route path="/signup" element={<Register handleRegistration={handleRegistration} />} />
             <Route path="*" element={<PageNotFound />} />

@@ -10,7 +10,8 @@ function Movies({
     isCheckedShortFilmMovies,
     arrayIndexesCardsOnTableMovies,
     arrayOfCardsMovies,
-    handleRequestDataRecovery
+    handleRequestDataRecovery,
+    handleMovieStatusUpdate
 }) {
     const initialRequestText = localStorage.getItem('requestText') ?? '';
     useEffect(() => {
@@ -31,6 +32,7 @@ function Movies({
                 handleClickAdd={handleClickAdd}
                 arrayIndexesCardsOnTable={arrayIndexesCardsOnTableMovies}
                 arrayOfCards={arrayOfCardsMovies}
+                handleMovieStatusUpdate={handleMovieStatusUpdate}
             />
         </main>
     );
