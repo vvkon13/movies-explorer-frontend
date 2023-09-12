@@ -5,20 +5,18 @@ import MoviesCardAdd from "../MoviesCardAdd/MoviesCardAdd";
 
 function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards, handleMovieStatusUpdate }) {
     const [flagAddMovies, setFlagAddMovies] = useState(false);
+    const [flagNothingFound, setflagNothingFound] = useState(false);
 
     useEffect(() => {
-        setFlagAddMovies((arrayOfCards !== null) &&
-            (arrayOfCards.length > 0) &&
-            (arrayOfCards.length > arrayIndexesCardsOnTable[arrayIndexesCardsOnTable.length - 1] + 1));
+        if (arrayOfCards !== null) {
+        setflagNothingFound(arrayIndexesCardsOnTable.length===0);
+        setFlagAddMovies(arrayIndexesCardsOnTable.completed);
+        }    
     }, [arrayIndexesCardsOnTable, arrayOfCards])
 
     const getFilms = () => {
         let content = [];
         for (let i = 0; i < arrayIndexesCardsOnTable.length; i++) {
-            console.log(`Hi это${i} обход цикла вот вам arrayIndexesCardsOnTable:`);
-            console.log(arrayIndexesCardsOnTable);
-            console.log(`Hi это${i} обход цикла вот вам arrayOfCards:`);
-            console.log(arrayOfCards);
             let card = arrayOfCards[arrayIndexesCardsOnTable[i]];
             content.push(
                 <li
@@ -34,7 +32,8 @@ function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards
 
     return (
         <section className="movies-card-list">
-            <ul className="card-list">{getFilms()}</ul>
+            {!flagNothingFound &&(<ul className="card-list">{getFilms()}</ul>)}
+            {flagNothingFound &&(<p className="page-not-found__text">Ничего не найдено</p>)}
             {flagAddMovies && (<MoviesCardAdd
                 onClick={handleClickAdd}
                 flagAddMovies={flagAddMovies}

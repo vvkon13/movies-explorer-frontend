@@ -61,6 +61,10 @@ function App() {
       }
       i++;
     };
+    if (maxItemPutOnTable > 0) {
+      arr.completed = false;
+    }
+    else arr.completed = true;
     return arr;
   }
 
@@ -245,6 +249,7 @@ function App() {
     setLoggedIn(false);
     setCurrentUser(initialStateCurrentUser);
     clearingLocalStorage();
+    clearingState();
     navigate("/");
   }
 
@@ -318,21 +323,25 @@ function App() {
     setIsLoading(true)
     api.deleteMovie(card.movieId)
       .then(() => {
-        setArrayOfCardsSavedMovies((prevArrayOfCardsSavedMovies)=>{
-          let arrayCards  = prevArrayOfCardsSavedMovies.filter((c) => { return c.movieId !== card.movieId });
-          let indexArr = arrayOfCardsMovies.findIndex((item) => { return item.id === card.movieId });
-          arrayOfCardsMovies[indexArr].liked = false;
-        setArrayIndexesCardsOnTableSavedMovies((prevArrayIndexesCardsOnTableSavedMovies) => {
-          return putCardsOnTable(
-            [],
-            arrayCards,
-            isCheckedShortFilmSavedMovies,
-            prevArrayIndexesCardsOnTableSavedMovies.length
-          )
+        setArrayOfCardsSavedMovies((prevArrayOfCardsSavedMovies) => {
+          let arrayCards = prevArrayOfCardsSavedMovies.filter((c) => { return c.movieId !== card.movieId });
+          if (arrayOfCardsMovies) {
+            let indexArr = arrayOfCardsMovies.findIndex((item) => { return item.id === card.movieId });
+            if(indexArr !== -1) {
+              arrayOfCardsMovies[indexArr].liked = false;
+            }
+          }
+          setArrayIndexesCardsOnTableSavedMovies((prevArrayIndexesCardsOnTableSavedMovies) => {
+            return putCardsOnTable(
+              [],
+              arrayCards,
+              isCheckedShortFilmSavedMovies,
+              prevArrayIndexesCardsOnTableSavedMovies.length
+            )
+          })
+          return arrayCards;
         })
-        return arrayCards;  
       })
-    })
       .catch((err) => {
         openModalWindow(err.message || 'Ошибочка');
       })
@@ -349,6 +358,15 @@ function App() {
     localStorage.removeItem('isCheckedCheckboxShortFilmMovies');
   }
 
+  function clearingState() {
+    setIsCheckedShortFilmMovies(false);
+    setArrayIndexesCardsOnTableMovies([]);
+    setArrayOfCardsMovies(null);
+    setIsCheckedShortFilmSavedMovies(false);
+    setArrayIndexesCardsOnTableSavedMovies([]);
+    setArrayOfCardsSavedMovies(null);
+  }
+
   const tockenCheck = () => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -361,10 +379,12 @@ function App() {
         })
         .catch(() => {
           clearingLocalStorage();
+          clearingState();
         })
         .finally(() => setIsLoading(false));
     }
     clearingLocalStorage();
+    clearingState();
   }
 
   useEffect(() => {
