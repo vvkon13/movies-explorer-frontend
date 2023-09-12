@@ -27,6 +27,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState(initialStateCurrentUser);
   const [isVisibleNavigation, setIsVisibleNavigation] = useState(false);
   const [isVisibleModalWindow, setIsVisibleModalWindow] = useState(false);
+
   const [isCheckedShortFilmMovies, setIsCheckedShortFilmMovies]
     = useState(false);
   const [arrayIndexesCardsOnTableMovies, setArrayIndexesCardsOnTableMovies] = useState([]);
@@ -41,16 +42,10 @@ function App() {
   const [err, setErr] = useState('');
   const navigate = useNavigate();
 
-  function updateCardList(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms) {
-    if ((arrayResults === null) || (arrayResults.length === 0)) return [];
-    let maxItemPutOnTable = 0;
-    let i = 0;
+  function putCardsOnTable(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms, maxItemPutOnTable) {
     let arr = [...arrayIndexesAlreadyDisplayed];
-    if (arrayIndexesAlreadyDisplayed.length === 0) {
-      maxItemPutOnTable = 5 + (isScreenSm && 3) + (isScreenXl && 4)
-    }
-    else {
-      maxItemPutOnTable = 2 + (isScreenXl && 1);
+    let i = 0;
+    if (arrayIndexesAlreadyDisplayed.length > 0) {
       i = arrayIndexesAlreadyDisplayed[arrayIndexesAlreadyDisplayed.length - 1] + 1;
     }
     while ((i < arrayResults.length) && (maxItemPutOnTable > 0)) {
@@ -67,6 +62,18 @@ function App() {
       i++;
     };
     return arr;
+  }
+
+  function updateCardList(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms) {
+    if ((arrayResults === null) || (arrayResults.length === 0)) return [];
+    let maxItemPutOnTable = 0;
+    if (arrayIndexesAlreadyDisplayed.length === 0) {
+      maxItemPutOnTable = 5 + (isScreenSm && 3) + (isScreenXl && 4)
+    }
+    else {
+      maxItemPutOnTable = 2 + (isScreenXl && 1);
+    }
+    return putCardsOnTable(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms, maxItemPutOnTable);
   }
 
   function handleSearchFilmsMovies({ requestText }) {
@@ -93,17 +100,48 @@ function App() {
           }
           item.thumbnail = `https://api.nomoreparties.co${item.image.formats.thumbnail.url}`;
           item.image = `https://api.nomoreparties.co${item.image.url}`;
+          item._id = item.id;
           return item;
         });
-        console.log(arr2);
         let indexArr = updateCardList([], arr2, isCheckedShortFilmMovies);
         setArrayIndexesCardsOnTableMovies(indexArr);
         setArrayOfCardsMovies(arr2);
         localStorage.setItem('arrayIndexesCardsOnTableMovies', JSON.stringify(indexArr));
         localStorage.setItem('arrayOfCardsMovies', JSON.stringify(arr2));
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        openModalWindow("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+      })
+      .finally(() => setIsLoading(false));
+  }
+
+  function handleGetAllSavedMovies() {
+    setIsLoading(true);
+    api.getMovies()
+      .then((data) => {
+        let indexArr = updateCardList([], data, isCheckedShortFilmSavedMovies);
+        setArrayIndexesCardsOnTableSavedMovies(indexArr);
+        setArrayOfCardsSavedMovies(data);
+      })
+      .catch(() => {
+        openModalWindow("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+      })
+      .finally(() => setIsLoading(false));
+  }
+
+  function handleSearchSavedFilms({ requestText }) {
+    setIsLoading(true);
+    api.getMovies()
+      .then((data) => {
+        let arr = [];
+        const requestTextUpperCase = requestText.toUpperCase();
+        arr = data.filter(item => ((item.nameRU.toUpperCase().includes(requestTextUpperCase))
+          || (item.nameEN.includes(requestTextUpperCase))))
+        let indexArr = updateCardList([], arr, isCheckedShortFilmSavedMovies);
+        setArrayIndexesCardsOnTableSavedMovies(indexArr);
+        setArrayOfCardsSavedMovies(arr);
+      })
+      .catch(() => {
         openModalWindow("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
       })
       .finally(() => setIsLoading(false));
@@ -123,12 +161,34 @@ function App() {
     })
   }
 
+  function handleChangeCneckboxSavedMovies() {
+    setIsCheckedShortFilmSavedMovies((prevIsCheckedShortFilmSavedMovies) => {
+      let indexArr = updateCardList(
+        [],
+        arrayOfCardsSavedMovies,
+        !prevIsCheckedShortFilmSavedMovies
+      );
+      setArrayIndexesCardsOnTableSavedMovies(indexArr);
+      return !prevIsCheckedShortFilmSavedMovies
+    })
+  }
+
   function handleClickAddMovies() {
     setIsLoading(true);
     setArrayIndexesCardsOnTableMovies(updateCardList(
       arrayIndexesCardsOnTableMovies,
       arrayOfCardsMovies,
       isCheckedShortFilmMovies
+    ));
+    setIsLoading(false);
+  }
+
+  function handleClickAddSavedMovies() {
+    setIsLoading(true);
+    setArrayIndexesCardsOnTableSavedMovies(updateCardList(
+      arrayIndexesCardsOnTableSavedMovies,
+      arrayOfCardsSavedMovies,
+      isCheckedShortFilmSavedMovies
     ));
     setIsLoading(false);
   }
@@ -254,13 +314,39 @@ function App() {
     }
   }
 
+  function handleSavedMoviesStatusUpdate(card) {
+    setIsLoading(true)
+    api.deleteMovie(card.movieId)
+      .then(() => {
+        setArrayOfCardsSavedMovies((prevArrayOfCardsSavedMovies)=>{
+          let arrayCards  = prevArrayOfCardsSavedMovies.filter((c) => { return c.movieId !== card.movieId });
+          let indexArr = arrayOfCardsMovies.findIndex((item) => { return item.id === card.movieId });
+          arrayOfCardsMovies[indexArr].liked = false;
+        setArrayIndexesCardsOnTableSavedMovies((prevArrayIndexesCardsOnTableSavedMovies) => {
+          return putCardsOnTable(
+            [],
+            arrayCards,
+            isCheckedShortFilmSavedMovies,
+            prevArrayIndexesCardsOnTableSavedMovies.length
+          )
+        })
+        return arrayCards;  
+      })
+    })
+      .catch((err) => {
+        openModalWindow(err.message || 'Ошибочка');
+      })
+      .finally(() => {
+        setIsLoading(false)
+      });
+  }
+
   function clearingLocalStorage() {
     localStorage.removeItem('token');
     localStorage.removeItem('requestText');
     localStorage.removeItem('arrayOfCardsMovies');
     localStorage.removeItem('arrayIndexesCardsOnTableMovies');
     localStorage.removeItem('isCheckedCheckboxShortFilmMovies');
-
   }
 
   const tockenCheck = () => {
@@ -326,6 +412,14 @@ function App() {
               element={
                 <ProtectedRoute
                   element={SavedMovies}
+                  handleGetAllSavedMovies={handleGetAllSavedMovies}
+                  handleSearchSavedFilms={handleSearchSavedFilms}
+                  handleChangeCneckboxSavedMovies={handleChangeCneckboxSavedMovies}
+                  isCheckedShortFilmSavedMovies={isCheckedShortFilmSavedMovies}
+                  handleClickAddSavedMovies={handleClickAddSavedMovies}
+                  arrayIndexesCardsOnTableSavedMovies={arrayIndexesCardsOnTableSavedMovies}
+                  arrayOfCardsSavedMovies={arrayOfCardsSavedMovies}
+                  handleSavedMoviesStatusUpdate={handleSavedMoviesStatusUpdate}
                 />}
             />
             <Route

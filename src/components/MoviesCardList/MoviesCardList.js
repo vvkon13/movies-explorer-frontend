@@ -15,11 +15,16 @@ function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards
     const getFilms = () => {
         let content = [];
         for (let i = 0; i < arrayIndexesCardsOnTable.length; i++) {
+            console.log(`Hi это${i} обход цикла вот вам arrayIndexesCardsOnTable:`);
+            console.log(arrayIndexesCardsOnTable);
+            console.log(`Hi это${i} обход цикла вот вам arrayOfCards:`);
+            console.log(arrayOfCards);
+            let card = arrayOfCards[arrayIndexesCardsOnTable[i]];
             content.push(
                 <li
-                    key={i}>
+                    key={card._id}>
                     <MoviesCard
-                        card={arrayOfCards[arrayIndexesCardsOnTable[i]]}
+                        card={card}
                         handleMovieStatusUpdate={handleMovieStatusUpdate}
                     />
                 </li>);

@@ -21,7 +21,7 @@ function MoviesCard({ card, handleMovieStatusUpdate }) {
                     </p>
                 </div>
             </div>
-            {!flagMovies && card.liked && (
+            {!flagMovies && (
                 <div className="card__deleted"></div>
             )}
             {!card.liked && flagMovies && (
