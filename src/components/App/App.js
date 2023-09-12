@@ -258,6 +258,7 @@ function App() {
     api.setUserInformation({ email, name })
       .then(() => {
         setCurrentUser({ email, name });
+        openModalWindow('Успех!');
       })
       .catch((err) => {
         openModalWindow(err.message || 'Ошибочка');
