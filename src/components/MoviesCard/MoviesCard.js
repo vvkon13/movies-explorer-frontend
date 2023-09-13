@@ -12,7 +12,14 @@ function MoviesCard({ card, handleMovieStatusUpdate }) {
 
     return (
         <div className="card">
-            <img src={card.image} alt={`Фото ${card.nameRU}`} className="card__photo" onClick={handleClick} />
+            <a
+                href={card.trailerLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card__link-trailer"
+            >
+                <img src={card.image} alt={`Фото ${card.nameRU}`} className="card__photo" />
+            </a>
             <div className="card__description">
                 <h2 className="card__name">{card.nameRU}</h2>
                 <div className="card__duration-wrapper">
@@ -22,17 +29,17 @@ function MoviesCard({ card, handleMovieStatusUpdate }) {
                 </div>
             </div>
             {!flagMovies && (
-                <div className="card__deleted"></div>
+                <div className="card__deleted app__button" onClick={handleClick}></div>
             )}
             {!card.liked && flagMovies && (
-                <div className="card__disliked-wrapper">
-                    <p className="card__disliked">
+                <div className="card__disliked-wrapper app__button" onClick={handleClick}>
+                    <p className="card__disliked app__button">
                         Сохранить
                     </p>
                 </div>
             )}
             {card.liked && flagMovies && (
-                <div className="card__liked"></div>
+                <div className="card__liked app__button" onClick={handleClick}></div>
             )}
         </div >
     );
