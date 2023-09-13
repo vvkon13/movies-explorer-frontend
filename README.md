@@ -11,3 +11,9 @@
 Название макета: dark-2
 
 Ссылка на Пул Реквест level-3: https://github.com/vvkon13/movies-explorer-frontend/pull/7#issue-1894247402
+
+Ссылки на проект:
+
+Frontend https://groundhogday.nomoreparties.co
+
+Backend https://api.groundhogday.nomoreparties.co
