@@ -5,6 +5,14 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import "./Profile.css";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import {
+    REG_EX_NAME,
+    ERROR_MESSAGE_NAME_MIN,
+    ERROR_MESSAGE_NAME_MAX,
+    ERROR_MESSAGE_REQUIRED,
+    ERROR_MESSAGE_EMAIL,
+    ERROR_MESSAGE_NAME_REG_EX,
+} from "../../utils/constants";
 
 
 function Profile({ handleChangeProfile, handleExitProfile }) {
@@ -20,13 +28,13 @@ function Profile({ handleChangeProfile, handleExitProfile }) {
         },
         validationSchema: Yup.object({
             userName: Yup.string()
-                .min(2, 'Еще чуть чуть, Имя должно быть не меньше двух символов')
-                .max(30, 'У Вас Имя больше 30 символов придумайте НИК поменьше')
-                .matches(/^[а-яёА-ЯЁa-zA-Z\s-]+$/, 'Имя должно содержать только латиницу, кириллицу, пробел или дефис')
-                .required('Забыли заполнить!'),
+                .min(2, ERROR_MESSAGE_NAME_MIN)
+                .max(30, ERROR_MESSAGE_NAME_MAX)
+                .matches(REG_EX_NAME, ERROR_MESSAGE_NAME_REG_EX)
+                .required(ERROR_MESSAGE_REQUIRED),
             userEmail: Yup.string()
-                .email('Нужна электронная почта, а не почта России!!!')
-                .required('Забыли заполнить!'),
+                .email(ERROR_MESSAGE_EMAIL)
+                .required(ERROR_MESSAGE_REQUIRED),
         }),
         onSubmit: values => {
             handleChangeProfile({
@@ -86,7 +94,7 @@ function Profile({ handleChangeProfile, handleExitProfile }) {
                         className="profile__button-submit app__button"
                         disabled={!formik.isValid ||
                             ((currentUser.name === formik.values.userName) &&
-                                (currentUser.email === formik.values.userEmail))}
+                                (currentUser.email === formik.values.userEmail))||isLoading}
                         type="submit" >
                         {isLoading ? 'Запись...' : 'Редактировать'}
                     </button>

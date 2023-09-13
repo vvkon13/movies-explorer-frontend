@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "./PageNotFound.css";
 
 function PageNotFound() {
-  const navigate = useNavigate();
-  const goBack = () => {
-    navigate(-1);
-  }
+    const navigate = useNavigate();
+    const goBack = () => {
+      navigate(-1);
+    }
+
   return (
     <main className="page-not-found">
       <section>

@@ -18,6 +18,7 @@ import ModalErrorWindow from '../ModalErrorWindow/ModalErrorWindow';
 import { api } from '../../utils/MainApi';
 import { moviesApi } from '../../utils/MoviesApi';
 import { ProtectedRoute } from "../ProtectedRoute";
+import {ERROR_MESSAGE_CONNECTION_PROBLEM} from "../../utils/constants";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -114,7 +115,7 @@ function App() {
         localStorage.setItem('arrayOfCardsMovies', JSON.stringify(arr2));
       })
       .catch(() => {
-        openModalWindow("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+        openModalWindow(ERROR_MESSAGE_CONNECTION_PROBLEM);
       })
       .finally(() => setIsLoading(false));
   }
@@ -128,7 +129,7 @@ function App() {
         setArrayOfCardsSavedMovies(data);
       })
       .catch(() => {
-        openModalWindow("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+        openModalWindow(ERROR_MESSAGE_CONNECTION_PROBLEM);
       })
       .finally(() => setIsLoading(false));
   }
@@ -146,7 +147,7 @@ function App() {
         setArrayOfCardsSavedMovies(arr);
       })
       .catch(() => {
-        openModalWindow("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+        openModalWindow(ERROR_MESSAGE_CONNECTION_PROBLEM);
       })
       .finally(() => setIsLoading(false));
   }

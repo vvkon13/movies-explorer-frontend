@@ -1,10 +1,24 @@
 import React from "react";
+import { useContext } from "react";
 import LogoPreloader from "../LogoPreloader/LogoPreloader";
 import "./SignInUp.css";
 import { useFormik } from 'formik';
+import { AppContext } from "../../contexts/AppContext";
 import * as Yup from 'yup';
+import {
+    REG_EX_NAME,
+    ERROR_MESSAGE_NAME_MIN,
+    ERROR_MESSAGE_NAME_MAX,
+    ERROR_MESSAGE_REQUIRED,
+    ERROR_MESSAGE_EMAIL,
+    ERROR_MESSAGE_PASSWORD_MIN,
+    ERROR_MESSAGE_PASSWORD_MAX,
+    ERROR_MESSAGE_NAME_REG_EX,
+} from "../../utils/constants";
 
 function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
+    const { isLoading } = useContext(AppContext);
+
     let isRegistration = false;
     if (formName === 'register') { isRegistration = true };
 
@@ -18,17 +32,17 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
         },
         validationSchema: Yup.object({
             userName: isRegistration && Yup.string()
-                .min(2, 'Еще чуть чуть, Имя должно быть не меньше двух символов')
-                .max(30, 'У Вас Имя больше 30 символов придумайте НИК поменьше')
-                .matches(/^[а-яёА-ЯЁa-zA-Z\s-]+$/, 'Имя должно содержать только латиницу, кириллицу, пробел или дефис')
-                .required('Забыли заполнить!'),
+                .min(2, ERROR_MESSAGE_NAME_MIN)
+                .max(30, ERROR_MESSAGE_NAME_MAX)
+                .matches(REG_EX_NAME, ERROR_MESSAGE_NAME_REG_EX)
+                .required(ERROR_MESSAGE_REQUIRED),
             userEmail: Yup.string()
-                .email('Нужна электронная почта, а не почта России!!!')
-                .required('Забыли заполнить!'),
+                .email(ERROR_MESSAGE_EMAIL)
+                .required(ERROR_MESSAGE_REQUIRED),
             userPassword: Yup.string()
-                .min(5, 'Пароль не менее 5 символов')
-                .max(20, 'Уже достаточно!!! Не более 20 символов')
-                .required('Забыли заполнить!'),
+                .min(5, ERROR_MESSAGE_PASSWORD_MIN)
+                .max(20, ERROR_MESSAGE_PASSWORD_MAX)
+                .required(ERROR_MESSAGE_REQUIRED),
 
         }),
         onSubmit: values => {
@@ -112,7 +126,7 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
                 </div>
                 <button
                     className="sign-in-up__button-submit app__button"
-                    disabled={!formik.isValid}
+                    disabled={!formik.isValid && isLoading}
                     type="submit" >{buttonSubmitText}</button>
             </form>
         </section >

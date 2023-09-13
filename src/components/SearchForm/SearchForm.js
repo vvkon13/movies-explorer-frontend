@@ -1,9 +1,12 @@
 import React, { useEffect }  from "react";
+import { useContext } from "react";
+import { AppContext } from "../../contexts/AppContext";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import "./SearchForm.css";
 import useForm from "../../hooks/useForm";
 
 function SearchForm({ onSubmitForm, onChangeCheckbox, isCheckedShortFilmMovies, initialRequestText }) {
+    const { isLoading } = useContext(AppContext);
     const { values, setValues, handleChange } = useForm();
 
     useEffect(() => {
@@ -37,6 +40,7 @@ function SearchForm({ onSubmitForm, onChangeCheckbox, isCheckedShortFilmMovies, 
                     <button
                         className="search-form__button-submit app__button"
                         type="submit"
+                        disabled={isLoading}
                     />
                 </div>
                 <FilterCheckbox
