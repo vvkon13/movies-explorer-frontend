@@ -18,7 +18,15 @@ import ModalErrorWindow from '../ModalErrorWindow/ModalErrorWindow';
 import { api } from '../../utils/MainApi';
 import { moviesApi } from '../../utils/MoviesApi';
 import { ProtectedRoute } from "../ProtectedRoute";
-import { ERROR_MESSAGE_CONNECTION_PROBLEM } from "../../utils/constants";
+import {
+  ERROR_MESSAGE_CONNECTION_PROBLEM,
+  DURATION_SHORT_FILMS,
+  NUMBER_CARDS_DISPLAYED_SMALL_SCREEN,
+  ADDITIONAL_NUMBER_CARDS_DISPLAYED_MIDDLE_SCREEN,
+  ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN,
+  NUMBER_CARDS_DISPLAYED_SMALL_MIDDLE_SCREEN_PRESS_MORE_BTN,
+  ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN_PRESS_MORE_BTN
+} from "../../utils/constants";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -51,7 +59,7 @@ function App() {
     }
     while ((i < arrayResults.length) && (maxItemPutOnTable > 0)) {
       if (isShortFilms) {
-        if (arrayResults[i].duration < 40) {
+        if (arrayResults[i].duration < DURATION_SHORT_FILMS) {
           arr.push(i);
           maxItemPutOnTable--;
         }
@@ -73,10 +81,13 @@ function App() {
     if ((arrayResults === null) || (arrayResults.length === 0)) return [];
     let maxItemPutOnTable = 0;
     if (arrayIndexesAlreadyDisplayed.length === 0) {
-      maxItemPutOnTable = 5 + (isScreenSm && 3) + (isScreenXl && 4)
+      maxItemPutOnTable = NUMBER_CARDS_DISPLAYED_SMALL_SCREEN +
+        (isScreenSm && ADDITIONAL_NUMBER_CARDS_DISPLAYED_MIDDLE_SCREEN) +
+        (isScreenXl && ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN)
     }
     else {
-      maxItemPutOnTable = 2 + (isScreenXl && 1);
+      maxItemPutOnTable = NUMBER_CARDS_DISPLAYED_SMALL_MIDDLE_SCREEN_PRESS_MORE_BTN + 
+      (isScreenXl && ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN_PRESS_MORE_BTN);
     }
     return putCardsOnTable(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms, maxItemPutOnTable);
   }
