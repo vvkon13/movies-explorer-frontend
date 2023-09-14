@@ -385,8 +385,10 @@ function App() {
         })
         .finally(() => setIsLoading(false));
     }
-    clearingLocalStorage();
-    clearingState();
+    else {
+      clearingLocalStorage();
+      clearingState();
+    }
   }
 
   useEffect(() => {
