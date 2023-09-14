@@ -7,11 +7,13 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
     REG_EX_NAME,
+    REG_EX_EMAIL,
     ERROR_MESSAGE_NAME_MIN,
     ERROR_MESSAGE_NAME_MAX,
     ERROR_MESSAGE_REQUIRED,
     ERROR_MESSAGE_EMAIL,
     ERROR_MESSAGE_NAME_REG_EX,
+    ERROR_MESSAGE_EMAIL_REG_EX,
 } from "../../utils/constants";
 
 
@@ -34,6 +36,7 @@ function Profile({ handleChangeProfile, handleExitProfile }) {
                 .required(ERROR_MESSAGE_REQUIRED),
             userEmail: Yup.string()
                 .email(ERROR_MESSAGE_EMAIL)
+                .matches(REG_EX_EMAIL, ERROR_MESSAGE_EMAIL_REG_EX)
                 .required(ERROR_MESSAGE_REQUIRED),
         }),
         onSubmit: values => {

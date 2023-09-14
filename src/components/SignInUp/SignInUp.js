@@ -7,6 +7,7 @@ import { AppContext } from "../../contexts/AppContext";
 import * as Yup from 'yup';
 import {
     REG_EX_NAME,
+    REG_EX_EMAIL,
     ERROR_MESSAGE_NAME_MIN,
     ERROR_MESSAGE_NAME_MAX,
     ERROR_MESSAGE_REQUIRED,
@@ -14,6 +15,7 @@ import {
     ERROR_MESSAGE_PASSWORD_MIN,
     ERROR_MESSAGE_PASSWORD_MAX,
     ERROR_MESSAGE_NAME_REG_EX,
+    ERROR_MESSAGE_EMAIL_REG_EX,
 } from "../../utils/constants";
 
 function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
@@ -38,6 +40,7 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
                 .required(ERROR_MESSAGE_REQUIRED),
             userEmail: Yup.string()
                 .email(ERROR_MESSAGE_EMAIL)
+                .matches(REG_EX_EMAIL, ERROR_MESSAGE_EMAIL_REG_EX)
                 .required(ERROR_MESSAGE_REQUIRED),
             userPassword: Yup.string()
                 .min(5, ERROR_MESSAGE_PASSWORD_MIN)

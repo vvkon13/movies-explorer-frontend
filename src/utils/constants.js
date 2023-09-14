@@ -3,10 +3,12 @@ export const SCREEN_LG = 769;
 export const SCREEN_XL = 1280;
 
 export const REG_EX_NAME = /^[а-яёА-ЯЁa-zA-Z\s-]+$/;
+export const REG_EX_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.+.[a-zA-Z]{2,4}$/;
 export const ERROR_MESSAGE_NAME_MIN = 'Еще чуть чуть, Имя должно быть не меньше двух символов';
 export const ERROR_MESSAGE_NAME_MAX = 'У Вас Имя больше 30 символов придумайте НИК поменьше';
 export const ERROR_MESSAGE_REQUIRED = 'Забыли заполнить!';
 export const ERROR_MESSAGE_EMAIL = 'Нужна электронная почта, а не почта России!!!';
+export const ERROR_MESSAGE_EMAIL_REG_EX = 'Отсутствует точка в нужном месте';
 export const ERROR_MESSAGE_PASSWORD_MIN = 'Пароль не менее 5 символов';
 export const ERROR_MESSAGE_PASSWORD_MAX ='Уже достаточно!!! Не более 20 символов';
 export const ERROR_MESSAGE_NAME_REG_EX = 'Имя должно содержать только латиницу, кириллицу, пробел или дефис';
