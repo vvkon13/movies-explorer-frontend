@@ -218,7 +218,7 @@ function App() {
     api.signUp({ password, email, name })
       .then(() => {
         setCurrentUser({ email, name });
-        navigate('/signin');
+        handleAuthorization({password, email});
       })
       .catch((err) => {
         openModalWindow(err.message || 'Ошибочка');
@@ -236,7 +236,7 @@ function App() {
             .then((user) => {
               setCurrentUser(user);
               setLoggedIn(true);
-              navigate('/');
+              navigate('/movies');
             })
         }
       })

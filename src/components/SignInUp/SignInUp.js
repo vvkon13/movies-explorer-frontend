@@ -126,7 +126,7 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
                 </div>
                 <button
                     className="sign-in-up__button-submit app__button"
-                    disabled={!formik.isValid && isLoading}
+                    disabled={!formik.isValid || isLoading}
                     type="submit" >{buttonSubmitText}</button>
             </form>
         </section >
