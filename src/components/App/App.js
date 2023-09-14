@@ -18,7 +18,7 @@ import ModalErrorWindow from '../ModalErrorWindow/ModalErrorWindow';
 import { api } from '../../utils/MainApi';
 import { moviesApi } from '../../utils/MoviesApi';
 import { ProtectedRoute } from "../ProtectedRoute";
-import {ERROR_MESSAGE_CONNECTION_PROBLEM} from "../../utils/constants";
+import { ERROR_MESSAGE_CONNECTION_PROBLEM } from "../../utils/constants";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -218,7 +218,7 @@ function App() {
     api.signUp({ password, email, name })
       .then(() => {
         setCurrentUser({ email, name });
-        handleAuthorization({password, email});
+        handleAuthorization({ password, email });
       })
       .catch((err) => {
         openModalWindow(err.message || 'Ошибочка');
@@ -329,7 +329,7 @@ function App() {
           let arrayCards = prevArrayOfCardsSavedMovies.filter((c) => { return c.movieId !== card.movieId });
           if (arrayOfCardsMovies) {
             let indexArr = arrayOfCardsMovies.findIndex((item) => { return item.id === card.movieId });
-            if(indexArr !== -1) {
+            if (indexArr !== -1) {
               arrayOfCardsMovies[indexArr].liked = false;
             }
           }
@@ -377,7 +377,6 @@ function App() {
         .then(({ email, name }) => {
           setCurrentUser({ email, name });
           setLoggedIn(true);
-          navigate('/');
         })
         .catch(() => {
           clearingLocalStorage();
@@ -455,9 +454,15 @@ function App() {
                   handleExitProfile={handleExitProfile}
                 />}
             />
-            <Route path="/signin" element={<Login handleAuthorization={handleAuthorization} />} />
-            <Route path="/signup" element={<Register handleRegistration={handleRegistration} />} />
-            <Route path="*" element={<PageNotFound />} />
+            <Route
+              path="/signin"
+              element={<Login handleAuthorization={handleAuthorization} />} />
+            <Route
+              path="/signup"
+              element={<Register handleRegistration={handleRegistration} />} />
+            <Route
+              path="*"
+              element={<PageNotFound />} />
           </Routes>
           <Footer />
           <ModalErrorWindow err={err} onClose={handleCloseModalWindow} />

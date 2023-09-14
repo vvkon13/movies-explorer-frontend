@@ -1,14 +1,19 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
+import { AppContext } from "../../contexts/AppContext";
 import "./PageNotFound.css";
 
 function PageNotFound() {
-    const navigate = useNavigate();
-    const goBack = () => {
-      navigate(-1);
-    }
+  const { loggedIn } = useContext(AppContext);
 
-  return (
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate(-1);
+  }
+  return loggedIn ?
+    <Navigate to="/" replace /> :
+  (
     <main className="page-not-found">
       <section>
         <h1 className="page-not-found__header" >404</h1>
