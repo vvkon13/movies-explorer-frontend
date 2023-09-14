@@ -75,6 +75,7 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
                                 value={formik.values.userName}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
+                                disabled={isLoading}
                                 required
                             />
                             {formik.touched.userName && formik.errors.userName ? (
@@ -95,6 +96,7 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             value={formik.values.userEmail}
+                            disabled={isLoading}
                             required
                         />
                         {formik.touched.userEmail && formik.errors.userEmail ? (
@@ -107,7 +109,7 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
                         <input
                             type="password"
                             placeholder="Пароль"
-                            className="sign-in-up__input sign-in-up__input_password"
+                            className="sign-in-up__input sign-in-up__input_password app__input"
                             id="userPassword"
                             name="userPassword"
                             minLength="5"
@@ -115,6 +117,7 @@ function SignInUp({ formName, title, buttonSubmitText, onSignInUp }) {
                             value={formik.values.userPassword}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            disabled={isLoading}
                             required
                         />
                         {formik.touched.userPassword && formik.errors.userPassword ? (

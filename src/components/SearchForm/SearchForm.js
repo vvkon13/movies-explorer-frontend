@@ -36,6 +36,7 @@ function SearchForm({ onSubmitForm, onChangeCheckbox, isCheckedShortFilmMovies, 
                         maxLength="100"
                         value={values.requestText ?? ''}
                         onChange={handleChange}
+                        disabled={isLoading}
                         required />
                     <button
                         className="search-form__button-submit app__button"

@@ -67,6 +67,7 @@ function Profile({ handleChangeProfile, handleExitProfile }) {
                                 maxLength="30"
                                 value={formik.values.userName}
                                 onChange={formik.handleChange}
+                                disabled={isLoading}
                                 required
                             />
 
@@ -80,6 +81,7 @@ function Profile({ handleChangeProfile, handleExitProfile }) {
                                 name="userEmail"
                                 onChange={formik.handleChange}
                                 value={formik.values.userEmail}
+                                disabled={isLoading}
                                 required
                             />
                         </label>
