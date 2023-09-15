@@ -10,7 +10,7 @@ function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards
     useEffect(() => {
         if (arrayOfCards !== null) {
         setflagNothingFound(arrayIndexesCardsOnTable.length===0);
-        setFlagAddMovies(arrayIndexesCardsOnTable.completed);
+        setFlagAddMovies(!arrayIndexesCardsOnTable.completed);
         }    
     }, [arrayIndexesCardsOnTable, arrayOfCards])
 

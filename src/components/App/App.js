@@ -53,6 +53,7 @@ function App() {
 
   function putCardsOnTable(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms, maxItemPutOnTable) {
     let arr = [...arrayIndexesAlreadyDisplayed];
+    arr.completed = false;
     let i = 0;
     if (arrayIndexesAlreadyDisplayed.length > 0) {
       i = arrayIndexesAlreadyDisplayed[arrayIndexesAlreadyDisplayed.length - 1] + 1;
@@ -70,10 +71,10 @@ function App() {
       }
       i++;
     };
-    if (maxItemPutOnTable > 0) {
-      arr.completed = false;
+    
+    if (i === arrayResults.length) {
+      arr.completed = true;
     }
-    else arr.completed = true;
     return arr;
   }
 
