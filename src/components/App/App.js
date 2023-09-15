@@ -25,7 +25,9 @@ import {
   ADDITIONAL_NUMBER_CARDS_DISPLAYED_MIDDLE_SCREEN,
   ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN,
   NUMBER_CARDS_DISPLAYED_SMALL_MIDDLE_SCREEN_PRESS_MORE_BTN,
-  ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN_PRESS_MORE_BTN
+  ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN_PRESS_MORE_BTN,
+  NUMBER_CARDS_IN_ROW_ON_LARGE_SCREEN,
+  NUMBER_CARDS_IN_ROW_ON_MIDDLE_SCREEN,
 } from "../../utils/constants";
 
 function App() {
@@ -72,6 +74,11 @@ function App() {
       i++;
     };
     
+    if ((isShortFilms) && (i < arrayResults.length))
+    while (i < arrayResults.length) {
+      if (arrayResults[i].duration < DURATION_SHORT_FILMS) break;
+      i++;
+    }
     if (i === arrayResults.length) {
       arr.completed = true;
     }
@@ -79,6 +86,7 @@ function App() {
   }
 
   function updateCardList(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms) {
+    let numberOfElementsUpToFullRow = 0;
     if ((arrayResults === null) || (arrayResults.length === 0)) return [];
     let maxItemPutOnTable = 0;
     if (arrayIndexesAlreadyDisplayed.length === 0) {
@@ -87,8 +95,15 @@ function App() {
         (isScreenXl && ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN)
     }
     else {
-      maxItemPutOnTable = NUMBER_CARDS_DISPLAYED_SMALL_MIDDLE_SCREEN_PRESS_MORE_BTN + 
-      (isScreenXl && ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN_PRESS_MORE_BTN);
+      if (isScreenXl && ((arrayIndexesAlreadyDisplayed.length % NUMBER_CARDS_IN_ROW_ON_LARGE_SCREEN) > 0)) {
+        numberOfElementsUpToFullRow = (NUMBER_CARDS_IN_ROW_ON_LARGE_SCREEN - arrayIndexesAlreadyDisplayed.length % NUMBER_CARDS_IN_ROW_ON_LARGE_SCREEN);
+      }
+      if (!isScreenXl && isScreenSm && ((arrayIndexesAlreadyDisplayed.length % NUMBER_CARDS_IN_ROW_ON_MIDDLE_SCREEN) > 0)) {
+        numberOfElementsUpToFullRow = (NUMBER_CARDS_IN_ROW_ON_MIDDLE_SCREEN - arrayIndexesAlreadyDisplayed.length % NUMBER_CARDS_IN_ROW_ON_MIDDLE_SCREEN);
+      }
+      maxItemPutOnTable = numberOfElementsUpToFullRow +
+        NUMBER_CARDS_DISPLAYED_SMALL_MIDDLE_SCREEN_PRESS_MORE_BTN +
+        (isScreenXl && ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN_PRESS_MORE_BTN);
     }
     return putCardsOnTable(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms, maxItemPutOnTable);
   }
@@ -219,8 +234,6 @@ function App() {
       setArrayIndexesCardsOnTableMovies(JSON.parse(localStorage.getItem('arrayIndexesCardsOnTableMovies')));
     }
     if (localStorage.getItem('isCheckedCheckboxShortFilmMovies')) {
-      console.log(localStorage.getItem('isCheckedCheckboxShortFilmMovies'));
-      console.log((localStorage.getItem('isCheckedCheckboxShortFilmMovies') === 'true'));
       setIsCheckedShortFilmMovies((localStorage.getItem('isCheckedCheckboxShortFilmMovies') === 'true'));
     }
   }
@@ -402,6 +415,27 @@ function App() {
     }
   }
 
+
+  function fillingInRow(numberOfElementsInRow) {
+    if ((arrayIndexesCardsOnTableMovies.length % numberOfElementsInRow) > 0) {
+      let numberOfElementsUpToFullRow = 0;
+      numberOfElementsUpToFullRow = numberOfElementsInRow -
+        arrayIndexesCardsOnTableMovies.length % numberOfElementsInRow;
+      setArrayIndexesCardsOnTableMovies((prevArrayIndexesCardsOnTableMovies) => {
+        return putCardsOnTable(prevArrayIndexesCardsOnTableMovies, arrayOfCardsMovies, isCheckedShortFilmMovies, numberOfElementsUpToFullRow)
+      }
+      )
+    }
+  }
+
+  function handleResizeWindowFromLargeToMiddle() {
+    fillingInRow(NUMBER_CARDS_IN_ROW_ON_MIDDLE_SCREEN);
+  }
+
+  function handleResizeWindowFromMiddleToLarge() {
+    fillingInRow(NUMBER_CARDS_IN_ROW_ON_LARGE_SCREEN)
+  }
+
   useEffect(() => {
     tockenCheck();
   }, []);
@@ -412,6 +446,7 @@ function App() {
     }
   }, [isScreenLg, isVisibleNavigation])
 
+
   return (
     <div className='app'>
       <AppContext.Provider
@@ -419,6 +454,7 @@ function App() {
           {
             isScreenSm,
             isScreenLg,
+            isScreenXl,
             loggedIn,
             isLoading,
             isVisibleNavigation,
@@ -441,6 +477,9 @@ function App() {
                   arrayOfCardsMovies={arrayOfCardsMovies}
                   handleRequestDataRecovery={handleRequestDataRecovery}
                   handleMovieStatusUpdate={handleMovieStatusUpdate}
+                  handleResizeWindowFromMiddleToLarge={handleResizeWindowFromMiddleToLarge}
+                  handleResizeWindowFromLargeToMiddle={handleResizeWindowFromLargeToMiddle}
+
                 />} />
             <Route
               path="/saved-movies"
