@@ -50,12 +50,14 @@ function App() {
   const [arrayIndexesCardsOnTableSavedMovies, setArrayIndexesCardsOnTableSavedMovies] = useState([]);
   const [arrayOfCardsSavedMovies, setArrayOfCardsSavedMovies] = useState(null);
 
+
   const [err, setErr] = useState('');
   const navigate = useNavigate();
 
   function putCardsOnTable(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms, maxItemPutOnTable) {
     let arr = [...arrayIndexesAlreadyDisplayed];
-    arr.completed = false;
+    arr.completed = true;
+    if (arrayResults.length === 0) return arr;
     let i = 0;
     if (arrayIndexesAlreadyDisplayed.length > 0) {
       i = arrayIndexesAlreadyDisplayed[arrayIndexesAlreadyDisplayed.length - 1] + 1;
@@ -79,8 +81,8 @@ function App() {
       if (arrayResults[i].duration < DURATION_SHORT_FILMS) break;
       i++;
     }
-    if (i === arrayResults.length) {
-      arr.completed = true;
+    if (i < arrayResults.length) {
+      arr.completed = false;
     }
     return arr;
   }

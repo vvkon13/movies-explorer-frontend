@@ -9,9 +9,10 @@ function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards
 
     useEffect(() => {
         if (arrayOfCards !== null) {
-        setflagNothingFound(arrayIndexesCardsOnTable.length===0);
-        setFlagAddMovies(!arrayIndexesCardsOnTable.completed);
-        }    
+            setflagNothingFound(arrayIndexesCardsOnTable.length === 0);
+            if (arrayIndexesCardsOnTable.completed !== undefined)
+                setFlagAddMovies(!arrayIndexesCardsOnTable.completed);
+        }
     }, [arrayIndexesCardsOnTable, arrayOfCards])
 
     const getFilms = () => {
@@ -32,8 +33,8 @@ function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards
 
     return (
         <section className="movies-card-list">
-            {!flagNothingFound &&(<ul className="card-list">{getFilms()}</ul>)}
-            {flagNothingFound &&(<p className="page-not-found__text">Ничего не найдено</p>)}
+            {!flagNothingFound && (<ul className="card-list">{getFilms()}</ul>)}
+            {flagNothingFound && (<p className="page-not-found__text">Ничего не найдено</p>)}
             {flagAddMovies && (<MoviesCardAdd
                 onClick={handleClickAdd}
                 flagAddMovies={flagAddMovies}
