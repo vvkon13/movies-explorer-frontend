@@ -15,76 +15,439 @@ import Footer from '../Footer/Footer';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Navigation from '../Navigation/Navigation';
 import ModalErrorWindow from '../ModalErrorWindow/ModalErrorWindow';
+import { api } from '../../utils/MainApi';
+import { moviesApi } from '../../utils/MoviesApi';
+import { ProtectedRoute } from "../ProtectedRoute";
+import {
+  ERROR_MESSAGE_CONNECTION_PROBLEM,
+  DURATION_SHORT_FILMS,
+  NUMBER_CARDS_DISPLAYED_SMALL_SCREEN,
+  ADDITIONAL_NUMBER_CARDS_DISPLAYED_MIDDLE_SCREEN,
+  ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN,
+  NUMBER_CARDS_DISPLAYED_SMALL_MIDDLE_SCREEN_PRESS_MORE_BTN,
+  ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN_PRESS_MORE_BTN,
+  NUMBER_CARDS_IN_ROW_ON_LARGE_SCREEN,
+  NUMBER_CARDS_IN_ROW_ON_MIDDLE_SCREEN,
+} from "../../utils/constants";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const { isScreenSm, isScreenLg } = useResize();
+  const { isScreenSm, isScreenLg, isScreenXl } = useResize();
   const [isLoading, setIsLoading] = useState(false);
   const initialStateCurrentUser = { name: '', email: '' };
   const [currentUser, setCurrentUser] = useState(initialStateCurrentUser);
   const [isVisibleNavigation, setIsVisibleNavigation] = useState(false);
   const [isVisibleModalWindow, setIsVisibleModalWindow] = useState(false);
-  const [err, setErr] = useState('');
 
+  const [isCheckedShortFilmMovies, setIsCheckedShortFilmMovies]
+    = useState(false);
+  const [arrayIndexesCardsOnTableMovies, setArrayIndexesCardsOnTableMovies] = useState([]);
+  const [arrayOfCardsMovies, setArrayOfCardsMovies] = useState(null);
+
+
+  const [isCheckedShortFilmSavedMovies, setIsCheckedShortFilmSavedMovies]
+    = useState(false);
+  const [arrayIndexesCardsOnTableSavedMovies, setArrayIndexesCardsOnTableSavedMovies] = useState([]);
+  const [arrayOfCardsSavedMovies, setArrayOfCardsSavedMovies] = useState(null);
+
+
+  const [err, setErr] = useState('');
   const navigate = useNavigate();
 
-  function handleRegistration({ email, name }) {
-    setIsLoading(true);
-    setTimeout(()=>{
-      setCurrentUser({email, name});
-      setIsLoading(false);
-      navigate("/signin");
-    }, 1300);
-  }
-
-  function handleAuthorization({ email }) {
-    setIsLoading(true);
-    setTimeout(()=>{
-      if (email === currentUser.email) {
-        setLoggedIn(true);
-        setIsLoading(false);
-        navigate("/saved-movies");  
+  function putCardsOnTable(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms, maxItemPutOnTable) {
+    let arr = [...arrayIndexesAlreadyDisplayed];
+    arr.completed = true;
+    if (arrayResults.length === 0) return arr;
+    let i = 0;
+    if (arrayIndexesAlreadyDisplayed.length > 0) {
+      i = arrayIndexesAlreadyDisplayed[arrayIndexesAlreadyDisplayed.length - 1] + 1;
+    }
+    while ((i < arrayResults.length) && (maxItemPutOnTable > 0)) {
+      if (isShortFilms) {
+        if (arrayResults[i].duration < DURATION_SHORT_FILMS) {
+          arr.push(i);
+          maxItemPutOnTable--;
+        }
       }
       else {
-        setIsLoading(false);
-        setErr('Вы ввели неправильный логин или пароль.');
-        setIsVisibleModalWindow(true);
+        arr.push(i);
+        maxItemPutOnTable--;
       }
-      setIsLoading(false);
-    }, 1300);
+      i++;
+    };
+    
+    if ((isShortFilms) && (i < arrayResults.length))
+    while (i < arrayResults.length) {
+      if (arrayResults[i].duration < DURATION_SHORT_FILMS) break;
+      i++;
+    }
+    if (i < arrayResults.length) {
+      arr.completed = false;
+    }
+    return arr;
+  }
+
+  function updateCardList(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms) {
+    let numberOfElementsUpToFullRow = 0;
+    if ((arrayResults === null) || (arrayResults.length === 0)) return [];
+    let maxItemPutOnTable = 0;
+    if (arrayIndexesAlreadyDisplayed.length === 0) {
+      maxItemPutOnTable = NUMBER_CARDS_DISPLAYED_SMALL_SCREEN +
+        (isScreenSm && ADDITIONAL_NUMBER_CARDS_DISPLAYED_MIDDLE_SCREEN) +
+        (isScreenXl && ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN)
+    }
+    else {
+      if (isScreenXl && ((arrayIndexesAlreadyDisplayed.length % NUMBER_CARDS_IN_ROW_ON_LARGE_SCREEN) > 0)) {
+        numberOfElementsUpToFullRow = (NUMBER_CARDS_IN_ROW_ON_LARGE_SCREEN - arrayIndexesAlreadyDisplayed.length % NUMBER_CARDS_IN_ROW_ON_LARGE_SCREEN);
+      }
+      if (!isScreenXl && isScreenSm && ((arrayIndexesAlreadyDisplayed.length % NUMBER_CARDS_IN_ROW_ON_MIDDLE_SCREEN) > 0)) {
+        numberOfElementsUpToFullRow = (NUMBER_CARDS_IN_ROW_ON_MIDDLE_SCREEN - arrayIndexesAlreadyDisplayed.length % NUMBER_CARDS_IN_ROW_ON_MIDDLE_SCREEN);
+      }
+      maxItemPutOnTable = numberOfElementsUpToFullRow +
+        NUMBER_CARDS_DISPLAYED_SMALL_MIDDLE_SCREEN_PRESS_MORE_BTN +
+        (isScreenXl && ADDITIONAL_NUMBER_CARDS_DISPLAYED_LARGE_SCREEN_PRESS_MORE_BTN);
+    }
+    return putCardsOnTable(arrayIndexesAlreadyDisplayed, arrayResults, isShortFilms, maxItemPutOnTable);
+  }
+
+  function handleSearchFilmsMovies({ requestText }) {
+    setIsLoading(true);
+    localStorage.setItem('requestText', requestText);
+    Promise.all([moviesApi.getMovies(), api.getMovies()])
+      .then(([data, dataSaved]) => {
+        let arr = [];
+        let arr2 = [];
+        if (requestText !== "**") {
+          const requestTextUpperCase = requestText.toUpperCase();
+          arr = data.filter(item => ((item.nameRU.toUpperCase().includes(requestTextUpperCase))
+            || (item.nameEN.includes(requestTextUpperCase))))
+        } else { arr = [...data]; }
+        arr2 = arr.map(item => {
+          if (dataSaved.length === 0) {
+            item.liked = false;
+          }
+          else if (dataSaved.find(element => element.movieId === item.id)) {
+            item.liked = true;
+          }
+          else {
+            item.liked = false;
+          }
+          item.thumbnail = `https://api.nomoreparties.co${item.image.formats.thumbnail.url}`;
+          item.image = `https://api.nomoreparties.co${item.image.url}`;
+          item._id = item.id;
+          return item;
+        });
+        let indexArr = updateCardList([], arr2, isCheckedShortFilmMovies);
+        setArrayIndexesCardsOnTableMovies(indexArr);
+        setArrayOfCardsMovies(arr2);
+        localStorage.setItem('arrayIndexesCardsOnTableMovies', JSON.stringify(indexArr));
+        localStorage.setItem('arrayOfCardsMovies', JSON.stringify(arr2));
+      })
+      .catch(() => {
+        openModalWindow(ERROR_MESSAGE_CONNECTION_PROBLEM);
+      })
+      .finally(() => setIsLoading(false));
+  }
+
+  function handleGetAllSavedMovies() {
+    setIsLoading(true);
+    api.getMovies()
+      .then((data) => {
+        let indexArr = updateCardList([], data, isCheckedShortFilmSavedMovies);
+        setArrayIndexesCardsOnTableSavedMovies(indexArr);
+        setArrayOfCardsSavedMovies(data);
+      })
+      .catch(() => {
+        openModalWindow(ERROR_MESSAGE_CONNECTION_PROBLEM);
+      })
+      .finally(() => setIsLoading(false));
+  }
+
+  function handleSearchSavedFilms({ requestText }) {
+    setIsLoading(true);
+    api.getMovies()
+      .then((data) => {
+        let arr = [];
+        const requestTextUpperCase = requestText.toUpperCase();
+        arr = data.filter(item => ((item.nameRU.toUpperCase().includes(requestTextUpperCase))
+          || (item.nameEN.includes(requestTextUpperCase))))
+        let indexArr = updateCardList([], arr, isCheckedShortFilmSavedMovies);
+        setArrayIndexesCardsOnTableSavedMovies(indexArr);
+        setArrayOfCardsSavedMovies(arr);
+      })
+      .catch(() => {
+        openModalWindow(ERROR_MESSAGE_CONNECTION_PROBLEM);
+      })
+      .finally(() => setIsLoading(false));
+  }
+
+  function handleChangeCneckboxMovies() {
+    setIsCheckedShortFilmMovies((prevIsCheckedShortFilmMovies) => {
+      let indexArr = updateCardList(
+        [],
+        arrayOfCardsMovies,
+        !prevIsCheckedShortFilmMovies
+      );
+      setArrayIndexesCardsOnTableMovies(indexArr);
+      localStorage.setItem('isCheckedCheckboxShortFilmMovies', !prevIsCheckedShortFilmMovies);
+      localStorage.setItem('arrayIndexesCardsOnTableMovies', JSON.stringify(indexArr));
+      return !prevIsCheckedShortFilmMovies
+    })
+  }
+
+  function handleChangeCneckboxSavedMovies() {
+    setIsCheckedShortFilmSavedMovies((prevIsCheckedShortFilmSavedMovies) => {
+      let indexArr = updateCardList(
+        [],
+        arrayOfCardsSavedMovies,
+        !prevIsCheckedShortFilmSavedMovies
+      );
+      setArrayIndexesCardsOnTableSavedMovies(indexArr);
+      return !prevIsCheckedShortFilmSavedMovies
+    })
+  }
+
+  function handleClickAddMovies() {
+    setIsLoading(true);
+    setArrayIndexesCardsOnTableMovies(updateCardList(
+      arrayIndexesCardsOnTableMovies,
+      arrayOfCardsMovies,
+      isCheckedShortFilmMovies
+    ));
+    setIsLoading(false);
+  }
+
+  function handleClickAddSavedMovies() {
+    setIsLoading(true);
+    setArrayIndexesCardsOnTableSavedMovies(updateCardList(
+      arrayIndexesCardsOnTableSavedMovies,
+      arrayOfCardsSavedMovies,
+      isCheckedShortFilmSavedMovies
+    ));
+    setIsLoading(false);
+  }
+
+  function handleRequestDataRecovery() {
+    console.log('Восстанавливаем данные...')
+    if (localStorage.getItem('arrayOfCardsMovies')) {
+      setArrayOfCardsMovies(JSON.parse(localStorage.getItem('arrayOfCardsMovies')));
+    }
+    if (localStorage.getItem('arrayIndexesCardsOnTableMovies')) {
+      setArrayIndexesCardsOnTableMovies(JSON.parse(localStorage.getItem('arrayIndexesCardsOnTableMovies')));
+    }
+    if (localStorage.getItem('isCheckedCheckboxShortFilmMovies')) {
+      setIsCheckedShortFilmMovies((localStorage.getItem('isCheckedCheckboxShortFilmMovies') === 'true'));
+    }
+  }
+
+  function handleRegistration({ password, email, name }) {
+    setIsLoading(true);
+    api.signUp({ password, email, name })
+      .then(() => {
+        setCurrentUser({ email, name });
+        handleAuthorization({ password, email });
+      })
+      .catch((err) => {
+        openModalWindow(err.message || 'Ошибочка');
+      })
+      .finally(() => setIsLoading(false));
+  }
+
+  function handleAuthorization({ password, email }) {
+    setIsLoading(true);
+    api.signIn({ password, email })
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+          api.getUserInformation()
+            .then((user) => {
+              setCurrentUser(user);
+              setLoggedIn(true);
+              navigate('/movies');
+            })
+        }
+      })
+      .catch((err) => {
+        openModalWindow(err.message || 'Ошибочка');
+      })
+      .finally(() => setIsLoading(false));
   }
 
   function handleExitProfile() {
     setLoggedIn(false);
+    setCurrentUser(initialStateCurrentUser);
+    clearingLocalStorage();
+    clearingState();
     navigate("/");
   }
- 
+
   function handleChangeProfile({ email, name }) {
     setIsLoading(true);
-    setTimeout(()=>{
-      setCurrentUser({email, name});
-      setIsLoading(false);
-    }, 1300);
+    api.setUserInformation({ email, name })
+      .then(() => {
+        setCurrentUser({ email, name });
+        openModalWindow('Успех!');
+      })
+      .catch((err) => {
+        openModalWindow(err.message || 'Ошибочка');
+      })
+      .finally(() => setIsLoading(false));
   }
 
-  function handleCloseModalWindow () {
+  function handleCloseModalWindow() {
     setIsVisibleModalWindow(false);
   }
 
-  function handleClickAddMovies () {
-    setIsLoading(true);
-    setTimeout(setIsLoading(false), 1300);
+  function openModalWindow(message) {
+    setErr(message);
+    setIsVisibleModalWindow(true);
   }
 
   function sayHi() {
     setIsVisibleNavigation(!isVisibleNavigation);
   }
 
-  useEffect(()=> {
+  function handleMovieStatusUpdate(card) {
+    setIsLoading(true)
+    if (card.liked === true) {
+      api.deleteMovie(card.id)
+        .then(() => {
+          card.liked = false;
+          localStorage.setItem('arrayOfCardsMovies', JSON.stringify(arrayOfCardsMovies));
+        })
+        .catch((err) => {
+          openModalWindow(err.message || 'Ошибочка');
+        })
+        .finally(() => {
+          setIsLoading(false)
+        });
+    } else {
+      api.addMovie({
+        country: card.country,
+        director: card.director,
+        duration: card.duration,
+        year: card.year,
+        description: card.description,
+        image: card.image,
+        trailerLink: card.trailerLink,
+        thumbnail: card.thumbnail,
+        movieId: card.id,
+        nameRU: card.nameRU,
+        nameEN: card.nameEN
+      })
+        .then(() => {
+          card.liked = true;
+          localStorage.setItem('arrayOfCardsMovies', JSON.stringify(arrayOfCardsMovies));
+        })
+        .catch((err) => {
+          openModalWindow(err.message || 'Ошибочка');
+        })
+        .finally(() => {
+          setIsLoading(false)
+        });
+    }
+  }
+
+  function handleSavedMoviesStatusUpdate(card) {
+    setIsLoading(true)
+    api.deleteMovie(card.movieId)
+      .then(() => {
+        setArrayOfCardsSavedMovies((prevArrayOfCardsSavedMovies) => {
+          let arrayCards = prevArrayOfCardsSavedMovies.filter((c) => { return c.movieId !== card.movieId });
+          if (arrayOfCardsMovies) {
+            let indexArr = arrayOfCardsMovies.findIndex((item) => { return item.id === card.movieId });
+            if (indexArr !== -1) {
+              arrayOfCardsMovies[indexArr].liked = false;
+            }
+          }
+          setArrayIndexesCardsOnTableSavedMovies((prevArrayIndexesCardsOnTableSavedMovies) => {
+            return putCardsOnTable(
+              [],
+              arrayCards,
+              isCheckedShortFilmSavedMovies,
+              prevArrayIndexesCardsOnTableSavedMovies.length
+            )
+          })
+          return arrayCards;
+        })
+      })
+      .catch((err) => {
+        openModalWindow(err.message || 'Ошибочка');
+      })
+      .finally(() => {
+        setIsLoading(false)
+      });
+  }
+
+  function clearingLocalStorage() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('requestText');
+    localStorage.removeItem('arrayOfCardsMovies');
+    localStorage.removeItem('arrayIndexesCardsOnTableMovies');
+    localStorage.removeItem('isCheckedCheckboxShortFilmMovies');
+  }
+
+  function clearingState() {
+    setIsCheckedShortFilmMovies(false);
+    setArrayIndexesCardsOnTableMovies([]);
+    setArrayOfCardsMovies(null);
+    setIsCheckedShortFilmSavedMovies(false);
+    setArrayIndexesCardsOnTableSavedMovies([]);
+    setArrayOfCardsSavedMovies(null);
+  }
+
+  const tockenCheck = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoading(true);
+      api.keyAuthentication(token)
+        .then(({ email, name }) => {
+          setCurrentUser({ email, name });
+          setLoggedIn(true);
+        })
+        .catch(() => {
+          clearingLocalStorage();
+          clearingState();
+        })
+        .finally(() => setIsLoading(false));
+    }
+    else {
+      clearingLocalStorage();
+      clearingState();
+    }
+  }
+
+
+  function fillingInRow(numberOfElementsInRow) {
+    if ((arrayIndexesCardsOnTableMovies.length % numberOfElementsInRow) > 0) {
+      let numberOfElementsUpToFullRow = 0;
+      numberOfElementsUpToFullRow = numberOfElementsInRow -
+        arrayIndexesCardsOnTableMovies.length % numberOfElementsInRow;
+      setArrayIndexesCardsOnTableMovies((prevArrayIndexesCardsOnTableMovies) => {
+        return putCardsOnTable(prevArrayIndexesCardsOnTableMovies, arrayOfCardsMovies, isCheckedShortFilmMovies, numberOfElementsUpToFullRow)
+      }
+      )
+    }
+  }
+
+  function handleResizeWindowFromLargeToMiddle() {
+    fillingInRow(NUMBER_CARDS_IN_ROW_ON_MIDDLE_SCREEN);
+  }
+
+  function handleResizeWindowFromMiddleToLarge() {
+    fillingInRow(NUMBER_CARDS_IN_ROW_ON_LARGE_SCREEN)
+  }
+
+  useEffect(() => {
+    tockenCheck();
+  }, []);
+
+  useEffect(() => {
     if (isScreenLg && isVisibleNavigation) {
       setIsVisibleNavigation(false)
     }
-  },[isScreenLg,isVisibleNavigation])
+  }, [isScreenLg, isVisibleNavigation])
+
 
   return (
     <div className='app'>
@@ -93,6 +456,7 @@ function App() {
           {
             isScreenSm,
             isScreenLg,
+            isScreenXl,
             loggedIn,
             isLoading,
             isVisibleNavigation,
@@ -102,18 +466,59 @@ function App() {
           <Header sayHi={sayHi} />
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/movies" element={<Movies handleClickAdd={handleClickAddMovies} />} />
-            <Route path="/saved-movies" element={<SavedMovies />} />
-            <Route path="/profile" element={
-            <Profile 
-            handleChangeProfile={handleChangeProfile}
-            handleExitProfile={handleExitProfile} />} />
-            <Route path="/signin" element={<Login handleAuthorization={handleAuthorization} />} />
-            <Route path="/signup" element={<Register handleRegistration={handleRegistration} />} />
-            <Route path="*" element={<PageNotFound />} />
+            <Route
+              path="/movies"
+              element={
+                <ProtectedRoute
+                  element={Movies}
+                  handleClickAdd={handleClickAddMovies}
+                  handleSearchFilms={handleSearchFilmsMovies}
+                  handleChangeCneckboxMovies={handleChangeCneckboxMovies}
+                  isCheckedShortFilmMovies={isCheckedShortFilmMovies}
+                  arrayIndexesCardsOnTableMovies={arrayIndexesCardsOnTableMovies}
+                  arrayOfCardsMovies={arrayOfCardsMovies}
+                  handleRequestDataRecovery={handleRequestDataRecovery}
+                  handleMovieStatusUpdate={handleMovieStatusUpdate}
+                  handleResizeWindowFromMiddleToLarge={handleResizeWindowFromMiddleToLarge}
+                  handleResizeWindowFromLargeToMiddle={handleResizeWindowFromLargeToMiddle}
+
+                />} />
+            <Route
+              path="/saved-movies"
+              element={
+                <ProtectedRoute
+                  element={SavedMovies}
+                  handleGetAllSavedMovies={handleGetAllSavedMovies}
+                  handleSearchSavedFilms={handleSearchSavedFilms}
+                  handleChangeCneckboxSavedMovies={handleChangeCneckboxSavedMovies}
+                  isCheckedShortFilmSavedMovies={isCheckedShortFilmSavedMovies}
+                  handleClickAddSavedMovies={handleClickAddSavedMovies}
+                  arrayIndexesCardsOnTableSavedMovies={arrayIndexesCardsOnTableSavedMovies}
+                  arrayOfCardsSavedMovies={arrayOfCardsSavedMovies}
+                  handleSavedMoviesStatusUpdate={handleSavedMoviesStatusUpdate}
+                />}
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute
+                  element={Profile}
+                  handleChangeProfile={handleChangeProfile}
+                  handleExitProfile={handleExitProfile}
+                />}
+            />
+            <Route
+              path="/signin"
+              element={<Login handleAuthorization={handleAuthorization} />} />
+            <Route
+              path="/signup"
+              element={<Register handleRegistration={handleRegistration} />} />
+            <Route
+              path="*"
+              element={<PageNotFound />} />
           </Routes>
           <Footer />
-          <ModalErrorWindow err={err} onClose={handleCloseModalWindow}/>
+          <ModalErrorWindow err={err} onClose={handleCloseModalWindow} />
           <Navigation onClose={sayHi} />
         </CurrentUserContext.Provider>
       </AppContext.Provider>

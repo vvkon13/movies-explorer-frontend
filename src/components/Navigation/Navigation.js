@@ -8,8 +8,8 @@ function Naigation({ onClose }) {
     return isVisibleNavigation && (
         <section className={`navigation ${isVisibleNavigation && 'navigation_opened'}`}>
             <nav className="navigation__visible">
-                <ul className="navigation__links">
-                    <div className="navigation__header">
+                <div className="navigation__links">
+                    <ul className="navigation__header">
                         <li>
                             <NavLink className='navigation__link app__link' to='/'>
                                 Главная
@@ -26,16 +26,13 @@ function Naigation({ onClose }) {
                                 Сохранённые фильмы
                             </NavLink>
                         </li>
-
-                    </div>
+                    </ul>
                     <div className="navigation__footer">
-                        <li>
-                            <NavLink className='navigation__buttopn-link app__link' to='/profile'>
-                                <button className="navigation__button-profile app__button" type="button" >Аккаунт</button>
-                            </NavLink>
-                        </li>
+                        <NavLink className='navigation__button-profile app__button' to='/profile'>
+                            Аккаунт
+                        </NavLink>
                     </div>
-                </ul>
+                </div>
                 <button className="navigation__button-close app__button" type="button" onClick={onClose} />
             </nav>
         </section >

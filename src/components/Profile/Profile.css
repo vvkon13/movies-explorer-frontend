@@ -2,7 +2,13 @@
     max-width: 410px;
     padding: 74px 0 0 0;
     margin: 0 auto;
+    position: relative;
 }
+
+.profile__inputs {
+    position: relative;
+}
+
 
 .profile__title {
     color: #FFF;
@@ -47,6 +53,28 @@
     font-weight: 400;
     line-height: normal;
 }
+
+.profile__input-error{
+    
+    padding: 0;
+    margin: 0;
+    color: #EE3465;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.profile__input-error_up {
+    position:absolute;
+    top:0;
+}
+
+.profile__input-error_down {
+    position:absolute;
+    bottom: 0;
+}
+
 
 .profile__button-submit {
     display: block;

@@ -6,7 +6,7 @@
     height: 100vh;
     visibility: hidden;
     opacity: 0;
-    z-index: 3;
+    z-index: 4;
 }
 
 .invisible-hat_removed {
@@ -22,7 +22,7 @@
     background: #202020;
     min-width: 320px;
     box-sizing: border-box;
-    z-index: 3;
+    z-index: 4;
 }
 
 .modal-window__title {

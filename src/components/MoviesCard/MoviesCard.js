@@ -1,20 +1,25 @@
-import React, { useState } from "react";
-import im from "../../images/pic__COLOR_pic.png";
 import "./MoviesCard.css";
 import { useLocation } from "react-router-dom";
 
-function MoviesCard({ card, cardLikedStatus }) {
-    const [isLiked, setIsLiked] = useState(cardLikedStatus);
+function MoviesCard({ card, handleMovieStatusUpdate }) {
     function handleClick() {
-        setIsLiked(!isLiked);
+        handleMovieStatusUpdate(card);
     };
+
     let flagMovies = false;
     let location = useLocation();
     if (location.pathname === "/movies") { flagMovies = true; }
 
     return (
         <div className="card">
-            <img src={im} alt={`Фото ${card.nameRU}`} className="card__photo" onClick={handleClick} />
+            <a
+                href={card.trailerLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card__link-trailer"
+            >
+                <img src={card.image} alt={`Фото ${card.nameRU}`} className="card__photo" />
+            </a>
             <div className="card__description">
                 <h2 className="card__name">{card.nameRU}</h2>
                 <div className="card__duration-wrapper">
@@ -23,18 +28,18 @@ function MoviesCard({ card, cardLikedStatus }) {
                     </p>
                 </div>
             </div>
-            {!flagMovies && isLiked && (
-                <div className="card__deleted"></div>
+            {!flagMovies && (
+                <div className="card__deleted app__button" onClick={handleClick}></div>
             )}
-            {!isLiked && flagMovies && (
-                <div className="card__disliked-wrapper">
-                    <p className="card__disliked">
+            {!card.liked && flagMovies && (
+                <div className="card__disliked-wrapper app__button" onClick={handleClick}>
+                    <p className="card__disliked app__button">
                         Сохранить
                     </p>
                 </div>
             )}
-            {isLiked && flagMovies && (
-                <div className="card__liked"></div>
+            {card.liked && flagMovies && (
+                <div className="card__liked app__button" onClick={handleClick}></div>
             )}
         </div >
     );

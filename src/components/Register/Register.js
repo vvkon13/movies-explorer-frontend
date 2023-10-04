@@ -1,15 +1,14 @@
 import SignInUp from "../SignInUp/SignInUp";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { AppContext } from "../../contexts/AppContext";
 import "./Register.css";
 
 export function Register({ handleRegistration }) {
-    const { isLoading } = useContext(AppContext);
-    return (
-    /*     loggedIn ?
-            <Navigate to='/main' replace /> : */
-    
+    const { isLoading, loggedIn } = useContext(AppContext);
+    return loggedIn ?
+        <Navigate to="/" replace /> :
+        (
         <main className="register">
             <SignInUp
                 formName={'register'}

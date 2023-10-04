@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  SCREEN_SM, SCREEN_LG,
+  SCREEN_SM, SCREEN_LG, SCREEN_XL,
 } from '../utils/constants';
 
 export const useResize = () => {
@@ -19,5 +19,6 @@ export const useResize = () => {
   return {
     isScreenSm: width >= SCREEN_SM,
     isScreenLg: width >= SCREEN_LG,
+    isScreenXl: width >= SCREEN_XL,
   };
 };

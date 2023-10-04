@@ -1,31 +1,44 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
-import { AppContext } from "../../contexts/AppContext";
 import MoviesCardAdd from "../MoviesCardAdd/MoviesCardAdd";
-import { useLocation } from "react-router-dom";
 
-function MoviesCardList({handleClickAdd}) {
-    const card = { nameRU: "33 слова о дизайне", duration: 77 };
-    const getFilms = (quantity, flag) => {
+function MoviesCardList({ handleClickAdd, arrayIndexesCardsOnTable, arrayOfCards, handleMovieStatusUpdate }) {
+    const [flagAddMovies, setFlagAddMovies] = useState(false);
+    const [flagNothingFound, setflagNothingFound] = useState(false);
+
+    useEffect(() => {
+        if (arrayOfCards !== null) {
+            setflagNothingFound(arrayIndexesCardsOnTable.length === 0);
+            if (arrayIndexesCardsOnTable.completed !== undefined)
+                setFlagAddMovies(!arrayIndexesCardsOnTable.completed);
+        }
+    }, [arrayIndexesCardsOnTable, arrayOfCards])
+
+    const getFilms = () => {
         let content = [];
-        for (let i = 0; i < quantity; i++) {
-            content.push(<li key={i}><MoviesCard card={card} cardLikedStatus={!flag} /></li>);
+        for (let i = 0; i < arrayIndexesCardsOnTable.length; i++) {
+            let card = arrayOfCards[arrayIndexesCardsOnTable[i]];
+            content.push(
+                <li
+                    key={card._id}>
+                    <MoviesCard
+                        card={card}
+                        handleMovieStatusUpdate={handleMovieStatusUpdate}
+                    />
+                </li>);
         }
         return content;
     };
-    const { isScreenSm, isScreenLg } = useContext(AppContext);
-    let location = useLocation();
-    let flagMovies = false;
-    let quantityFilms = 3
-    if (location.pathname === "/movies") {
-        flagMovies = true;
-        quantityFilms = 5 + (isScreenSm && 3) + (isScreenLg && 4);
-    }
+
     return (
         <section className="movies-card-list">
-            <ul className="card-list">{getFilms(quantityFilms, flagMovies)}</ul>
-            {flagMovies && (<MoviesCardAdd onClick={handleClickAdd}/>)}
+            {!flagNothingFound && (<ul className="card-list">{getFilms()}</ul>)}
+            {flagNothingFound && (<p className="page-not-found__text">Ничего не найдено</p>)}
+            {flagAddMovies && (<MoviesCardAdd
+                onClick={handleClickAdd}
+                flagAddMovies={flagAddMovies}
+            />)}
         </section>
     );
 }

@@ -21,6 +21,14 @@
   cursor: pointer;
 }
 
+.app__button:disabled {
+  color:#333333;
+  border-color: #333333;
+  opacity: 0.5;
+  cursor: default;
+}
+
+
 .app__link:hover {
   opacity: 0.7;
   transition: opacity 100ms ease-in;
@@ -29,6 +37,10 @@
 
 .app__input:focus {
   outline: 2px solid #4285F4;
+}
+
+.app__input:disabled {
+  opacity: 0.5;
 }
 
 .app__promo {
