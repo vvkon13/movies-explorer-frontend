@@ -1,6 +1,7 @@
 # [<img src="http://www.takes.org/logo.png" height="32px"/>](https://github.com/vvkon13) Movies explorer frontend
 Repository for the `Movies` project application, including the frontend of the application part.
-### Functionality 
+
+### Functionality:
 SPA application. Forming a keyword query to the Yandex service with movie data and displaying the result in the form of movie cards. A specific display of the number of movie cards depending on the screen width is configured. Restoring the result of the previous search on the movies page when the page is reloaded, closing the tab and returning back to the site. When saving a movie, the movie data is saved to the database on the server (the preparation and deployment of the backend was carried out independently) using its own developed API for user authentication and saving movies. Displaying saved movies in a special section of the site. Registration, login and profile editing forms are validated.
 
 
