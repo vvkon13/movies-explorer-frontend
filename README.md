@@ -1,4 +1,4 @@
-# [<img src="http://www.takes.org/logo.png" height="32px"/>](https://github.com/vvkon13) Movies explorer frontend
+# [<img src="http://www.takes.org/logo.png" height="32px" />](https://github.com/vvkon13) Movies explorer frontend
 Repository for the `Movies` project application, including the frontend of the application part.
 
 ### Functionality:
