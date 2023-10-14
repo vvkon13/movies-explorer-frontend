@@ -8,8 +8,16 @@ SPA application. Forming a keyword query to the Yandex service with movie data a
 ### :wrench: :hammer: :floppy_disk: Stack:   
 
 <img src="https://img.shields.io/badge/HTML-2F4F4F?style=for-the-badge&logo=html5"/> <img src="https://img.shields.io/badge/CSS-2F4F4F?style=for-the-badge&logo=css3"/>  <img src="https://img.shields.io/badge/JavaScript-2F4F4F?style=for-the-badge&logo=javascript"/> <img src="https://img.shields.io/badge/React-2F4F4F?style=for-the-badge&logo=react"/> <img src="https://img.shields.io/badge/Git-2F4F4F?style=for-the-badge&logo=git"/> <img src="https://img.shields.io/badge/Figma-2F4F4F?style=for-the-badge&logo=figma"/>
-
 #### [Link to the layout in Figma](https://www.figma.com/file/6FMWkB94wE7KTkcCgUXtnC/light-1?node-id=1%3A7266&mode=dev) The name of the dark-2 layout
+
+### 🏗️: Installation:
+* git clone git@github.com:vvkon13/movies-explorer-frontend.git
+* cd movies-explorer-frontend/ `Go to the created directory`
+* npm install `Install all necessary libraries and dependencies`
+* `Installation is complete. Use the commands:`
+* npm run start `Running the program using the development server`
+* `Or`
+* npm run build `This command will put the project in the build folder.`  
 
 #### [References to the project:](https://groundhogday.nomoreparties.co)
 
