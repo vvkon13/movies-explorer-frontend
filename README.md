@@ -18,9 +18,3 @@ SPA application. Forming a keyword query to the Yandex service with movie data a
 * npm run start `Running the program using the development server`
 * `Or`
 * npm run build `This command will put the project in the build folder.`  
-
-#### [References to the project:](https://groundhogday.nomoreparties.co)
-
-Frontend https://groundhogday.nomoreparties.co
-
-Backend https://api.groundhogday.nomoreparties.co
